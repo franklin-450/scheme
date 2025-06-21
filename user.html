@@ -234,7 +234,7 @@
 
                                 const downloadBtn = btn.nextElementSibling;
                                 downloadBtn.disabled = false;
-                                downloadBtn.innerHTML = `<a class="text-white text-decoration-none" href="http://localhost:3000/api/files/${filename}?token=${data.token}" download>Download</a>`;
+                                downloadBtn.innerHTML = `<a class="text-white text-decoration-none" href="https://server-ai73.onrender.com/api/files/${filename}?token=${data.token}" download>Download</a>`;
 
                                 const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
                                 downloads.push({ filename, token: data.token });
