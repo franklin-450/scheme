@@ -2,10 +2,27 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs/promises');
 const path = require('path');
-const cors = require('cors');
 const crypto = require('crypto');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
+const allowedOrigins = [
+  'https://schemehub.netlify.app/user',
+  'https://schemehub.netlify.app/upload',
+  'https://schemehub.netlify.app/manage'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
+
 
 const app = express();
 const PORT = 3000;
