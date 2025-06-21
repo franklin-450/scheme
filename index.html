@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduTrack KE - Scheme Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0, 0, 0, 0.8)),
+                  url('https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #f4f4f4;
+    }
+
+    .container-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #00d4ff;
+      margin-bottom: 1rem;
+    }
+
+    header p {
+      max-width: 900px;
+      margin: auto;
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: #e0e0e0;
+    }
+
+    .center-button {
+      margin-top: 3rem;
+    }
+
+    .btn-scheme {
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      background-color: #00c9a7;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,201,167,0.4);
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .btn-scheme:hover {
+      background-color: #00b295;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #bbb;
+      padding: 20px 0;
+    }
+
+    .hidden-link {
+      background: none;
+      border: none;
+      color: inherit;
+      font-size: inherit;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: none;
+    }
+
+    .hidden-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-hero">
+    <header>
+      <h1>📘 EduTrack KE - Smart Scheme Portal</h1>
+      <p>
+        EduTrack KE is more than just a platform — it's a digital solution crafted for the modern educator. Our mission is simple: 
+        empower every teacher in Kenya and beyond with accurate, up-to-date, and curriculum-aligned schemes of work, 
+        all accessible at the click of a button.
+        <br><br>
+        From primary to high school, from CBC to international curricula — EduTrack centralizes resources in a secure, 
+        fast, and intelligent system. With real-time access, mobile responsiveness, M-Pesa payments, and offline download options, 
+        this platform is designed to serve every educator — whether you're in the city or deep in the rural heartlands.
+        <br><br>
+        Our promise is clarity, quality, and convenience. Say goodbye to outdated paperwork and hello to a smart, 
+        reliable future for school planning.
+      </p>
+    </header>
+
+    <div class="center-button">
+      <a href="u.html">
+        <button class="btn-scheme">📥 Download Schemes</button>
+      </a>
+    </div>
+
+    <footer>
+      <p>
+        &copy; 2025 EduTrack KE — Empowering educators, transforming education.
+        <br>
+        For support, <span>visit <button class="hidden-link" onclick="window.location.href='admin.html'">this resource</button>.</span>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scheme Hub - Buy & Download</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .background-slide {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transition: background-image 1.5s ease-in-out;
+            filter: brightness(0.7);
+        }
+
+        .hero-overlay {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            padding: 5rem 1rem;
+            text-align: center;
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            color: white;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+            min-height: 250px;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .btn-pay {
+            background-color: #00e676;
+            border: none;
+        }
+
+        .btn-download {
+            background-color: #2979ff;
+            border: none;
+        }
+
+        .btn-download:disabled {
+            background-color: #999 !important;
+            cursor: not-allowed;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ccc;
+            padding: 2rem 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-slide" id="background-slide"></div>
+
+    <div class="hero-overlay text-white">
+        <h1 data-aos="fade-down">📚 Scheme Hub</h1>
+        <p data-aos="fade-up">Buy your schemes before downloading – powered by Fintech Super Companies</p>
+    </div>
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <input type="text" id="searchBox" class="form-control form-control-lg"
+                placeholder="🔍 Search by title, subject or class..." oninput="filterSchemes()">
+        </div>
+    </div>
+    <h2 class="text-center mb-4" data-aos="fade-up">🛍 Available Schemes</h2>
+
+    <div class="container">
+        <div class="row" id="scheme-list"></div>
+    </div>
+
+    <footer>
+        Powered by <strong>Fintech & Edutech</strong> — A Franklin's Product
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const unsplashImages = [
+            'https://source.unsplash.com/featured/?school',
+            'https://source.unsplash.com/featured/?education',
+            'https://source.unsplash.com/featured/?students',
+            'https://source.unsplash.com/featured/?classroom'
+        ];
+
+        let imgIndex = 0;
+        const backgroundDiv = document.getElementById('background-slide');
+
+        function preloadImages(urls, callback) {
+            let loaded = 0;
+            urls.forEach(url => {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    if (++loaded === urls.length) callback();
+                };
+                img.onerror = () => {
+                    if (++loaded === urls.length) callback();
+                };
+            });
+        }
+
+        preloadImages(unsplashImages, () => {
+            backgroundDiv.style.backgroundImage = `url('${unsplashImages[imgIndex]}')`;
+            setInterval(() => {
+                imgIndex = (imgIndex + 1) % unsplashImages.length;
+                backgroundDiv.style.backgroundImage = `url('${unsplashImages[imgIndex]}')`;
+            }, 5000);
+        });
+
+        async function loadSchemes() {
+            try {
+                const res = await fetch("http://localhost:3000/api/files");
+                const files = await res.json();
+                const schemeList = document.getElementById("scheme-list");
+
+                files.forEach(file => {
+                    const card = document.createElement("div");
+                    card.className = "col-md-4 mb-4";
+
+                    card.innerHTML = `
+          <div class="card p-3 h-100 d-flex flex-column justify-content-between">
+            <div>
+              <h5>${file.title}</h5>
+              <p><strong>Subject:</strong> ${file.subject}</p>
+              <p><strong>Class:</strong> ${file.class}</p>
+              <p><strong>Price:</strong> KES ${file.price}</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <button class="btn btn-pay btn-sm" onclick="payFor('${file.filename}', this)">Pay First</button>
+              <button class="btn btn-download btn-sm" disabled>Download</button>
+            </div>
+          </div>`;
+
+                    schemeList.appendChild(card);
+                });
+            } catch (err) {
+                Swal.fire("Error", "Failed to load schemes", "error");
+            }
+        }
+
+        function loadMyDownloads() {
+            const saved = JSON.parse(localStorage.getItem('downloads') || '[]');
+            if (!saved.length) return;
+
+            const section = document.createElement('div');
+            section.innerHTML = `<h3 class="mt-5 text-center">📜 My Downloads</h3><div class="row mt-3" id="my-downloads"></div>`;
+            document.querySelector('.container').appendChild(section);
+
+            const list = document.getElementById('my-downloads');
+            saved.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4 mb-4';
+                card.innerHTML = `
+        <div class="card p-3">
+          <h5>${item.filename}</h5>
+          <a class="btn btn-download" href="http://localhost:3000/files/${item.filename}?token=${item.token}" download>Download Again</a>
+        </div>
+      `;
+                list.appendChild(card);
+            });
+        }
+
+        function filterSchemes() {
+            const input = document.getElementById('searchBox').value.toLowerCase();
+            const cards = document.querySelectorAll('#scheme-list .card');
+
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.parentElement.style.display = text.includes(input) ? 'block' : 'none';
+            });
+        }
+
+        function payFor(filename, btn) {
+            Swal.fire({
+                title: 'Enter Phone Number',
+                input: 'text',
+                inputPlaceholder: '07XXXXXXXX',
+                confirmButtonText: 'Pay Now',
+                showCancelButton: true,
+                preConfirm: (value) => {
+                    if (!/^07\d{8}$/.test(value)) {
+                        Swal.showValidationMessage('Invalid Safaricom number!');
+                    }
+                }
+            }).then(result => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'Sending STK Push...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+
+                    fetch('http://localhost:3000/api/pay', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone: result.value, filename })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.close();
+                                Swal.fire('Success', 'Payment confirmed. Download unlocked.', 'success');
+
+                                const downloadBtn = btn.nextElementSibling;
+                                downloadBtn.disabled = false;
+                                downloadBtn.innerHTML = `<a class="text-white text-decoration-none" href="http://localhost:3000/api/files/${filename}?token=${data.token}" download>Download</a>`;
+
+                                const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
+                                downloads.push({ filename, token: data.token });
+                                localStorage.setItem('downloads', JSON.stringify(downloads));
+
+                                loadMyDownloads();
+                            } else {
+                                Swal.fire('Failed', 'Payment was not successful.', 'error');
+                            }
+                        });
+                }
+            });
+        }
+
+        loadSchemes();
+        loadMyDownloads();
+    </script>
+</body>
+
+</html>
