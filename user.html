@@ -144,7 +144,7 @@
 
         async function loadSchemes() {
             try {
-                const res = await fetch("http://localhost:3000/api/files");
+                const res = await fetch("https://server-ai73.onrender.com/api/files");
                 const files = await res.json();
                 const schemeList = document.getElementById("scheme-list");
 
@@ -188,7 +188,7 @@
                 card.innerHTML = `
         <div class="card p-3">
           <h5>${item.filename}</h5>
-          <a class="btn btn-download" href="http://localhost:3000/files/${item.filename}?token=${item.token}" download>Download Again</a>
+          <a class="btn btn-download" href="https://server-ai73.onrender.com/files/${item.filename}?token=${item.token}" download>Download Again</a>
         </div>
       `;
                 list.appendChild(card);
@@ -221,7 +221,7 @@
                 if (result.isConfirmed) {
                     Swal.fire({ title: 'Sending STK Push...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
-                    fetch('http://localhost:3000/api/pay', {
+                    fetch('https://server-ai73.onrender.com/api/pay', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ phone: result.value, filename })
