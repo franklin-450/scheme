@@ -144,7 +144,7 @@
 
         async function loadSchemes() {
             try {
-                const res = await fetch("https://server-ai73.onrender.com/api/files");
+                const res = await fetch("https://server-1-bmux.onrender.com/api/files");
                 const files = await res.json();
                 const schemeList = document.getElementById("scheme-list");
 
@@ -188,7 +188,7 @@
                 card.innerHTML = `
         <div class="card p-3">
           <h5>${item.filename}</h5>
-          <a class="btn btn-download" href="https://server-ai73.onrender.com/files/${item.filename}?token=${item.token}" download>Download Again</a>
+          <a class="btn btn-download" href="https://server-1-bmux.onrender.com/files/${item.filename}?token=${item.token}" download>Download Again</a>
         </div>
       `;
                 list.appendChild(card);
@@ -221,7 +221,7 @@
                 if (result.isConfirmed) {
                     Swal.fire({ title: 'Sending STK Push...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
-                    fetch('https://server-ai73.onrender.com/api/pay', {
+                    fetch('https://server-1-bmux.onrender.com/api/pay', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ phone: result.value, filename })
@@ -234,7 +234,7 @@
 
                                 const downloadBtn = btn.nextElementSibling;
                                 downloadBtn.disabled = false;
-                                downloadBtn.innerHTML = `<a class="text-white text-decoration-none" href="https://server-ai73.onrender.com/api/files/${filename}?token=${data.token}" download>Download</a>`;
+                                downloadBtn.innerHTML = `<a class="text-white text-decoration-none" href="https://server-1-bmux.onrender.com/api/files/${filename}?token=${data.token}" download>Download</a>`;
 
                                 const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
                                 downloads.push({ filename, token: data.token });
