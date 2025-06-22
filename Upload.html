@@ -93,7 +93,7 @@
       const formData = new FormData(e.target);
 
       try {
-        const res = await fetch('https://server-ai73.onrender.com/api/upload', {
+        const res = await fetch('https://server-1-bmux.onrender.com.com/api/upload', {
           method: 'POST',
           body: formData
         });
@@ -129,7 +129,7 @@
     });
 
     async function loadFiles() {
-      const res = await fetch('https://server-ai73.onrender.com/api/files');
+      const res = await fetch('https://server-1-bmux.onrender.com/api/files');
       const files = await res.json();
       const container = document.getElementById('fileList');
       container.innerHTML = '';
@@ -141,7 +141,7 @@
             <div class="card-body">
               <h5 class="card-title">${file.title}</h5>
               <p class="card-text">Subject: ${file.subject}<br>Class: ${file.class}<br>Price: KES ${file.price}</p>
-              <a href="https://server-ai73.onrender.com/api/files/${file.filename}" target="_blank" class="btn btn-sm btn-success mb-1">View</a>
+              <a href="https://server-1-bmux.onrender.com/api/files/${file.filename}" target="_blank" class="btn btn-sm btn-success mb-1">View</a>
               ${file.mimetype.includes('pdf') ? `<button class="btn btn-sm btn-warning mb-1" onclick="editPDF('${file.filename}')">Edit PDF</button>` : ''}
               ${file.mimetype.includes('word') ? `<button class="btn btn-sm btn-warning mb-1" onclick="editDOCX('${file.filename}')">Edit DOCX</button>` : ''}
               <button class="btn btn-sm btn-danger" onclick="deleteFile('${file.filename}')">Delete</button>
@@ -154,7 +154,7 @@
 
     async function deleteFile(filename) {
       if (!confirm('Delete this file?')) return;
-      const res = await fetch(`https://server-ai73.onrender.com/api/files/${filename}`, { method: 'DELETE' });
+      const res = await fetch(`https://server-1-bmux.onrender.com/api/files/${filename}`, { method: 'DELETE' });
       const result = await res.json();
       alert(result.success ? 'Deleted' : result.message);
       loadFiles();
@@ -163,7 +163,7 @@
     async function editPDF(filename) {
       const text = prompt('Enter text to add to PDF:');
       if (!text) return;
-      const res = await fetch(`https://server-ai73.onrender.com/api/edit/pdf/${filename}`, {
+      const res = await fetch(`https://server-1-bmux.onrender.com/api/edit/pdf/${filename}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
@@ -176,7 +176,7 @@
       const key = prompt('Enter placeholder to replace (e.g. name):');
       const value = prompt('Enter new value:');
       if (!key || !value) return;
-      const res = await fetch(`https://server-ai73.onrender.com/api/edit/docx/${filename}`, {
+      const res = await fetch(`https://server-1-bmux.onrender.com/api/edit/docx/${filename}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ replacements: { [key]: value } })
