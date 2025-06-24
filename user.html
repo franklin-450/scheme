@@ -7,6 +7,7 @@
     <title>Scheme Hub - Buy & Download</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         html,
@@ -71,6 +72,21 @@
             background-color: #999 !important;
             cursor: not-allowed;
         }
+        .btn-hover {
+  transition: all 0.3s ease;
+}
+.btn-hover:hover, .btn-hover:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(0, 255, 150, 0.4);
+}
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 15px rgba(255,255,255,0.1);
+}
+
 
         footer {
             text-align: center;
@@ -159,24 +175,35 @@ async function loadSchemes() {
       const card = document.createElement("div");
       card.className = "col-md-4 mb-4";
 
-      card.innerHTML = `
-  <div class="card p-2 h-100 d-flex flex-column justify-content-between" style="font-size: 0.85rem;">
+card.innerHTML = `
+  <div class="card p-3 h-100 d-flex flex-column justify-content-between shadow" style="font-size: 1rem;">
     ${file.mimetype.includes("pdf") || file.mimetype.includes("image") ? `
-      <iframe src="https://server-1-bmux.onrender.com/api/files/${file.filename}?token=preview" style="height:150px; width:100%; border:none;"></iframe>
+      <iframe src="https://server-1-bmux.onrender.com/api/files/${file.filename}?token=preview"
+              style="height:180px; width:100%; border:none; border-radius:8px; margin-bottom:10px;"
+              loading="lazy"></iframe>
     ` : `
-      <div style="height:150px; display:flex; align-items:center; justify-content:center; background:#111; color:#888;">No preview</div>
+      <div style="height:180px; display:flex; align-items:center; justify-content:center; background:#1c1c1c; color:#bbb; border-radius:8px; margin-bottom:10px;">
+        <i class="bi bi-file-earmark-text fs-2"></i> No Preview
+      </div>
     `}
-    <div class="mt-2">
-      <h6 class="mb-1" style="font-size: 1rem;">${file.title}</h6>
-      <p class="mb-1">📘 <strong>${file.subject}</strong></p>
-      <p class="mb-1">🏫 Class: ${file.class}</p>
-      <p class="mb-1">💰 KES ${file.price}</p>
+    <div class="mb-2">
+      <h5 class="fw-semibold text-white mb-2" style="font-size: 1.1rem;">
+        <i class="bi bi-journal-text me-2 text-info"></i>${file.title}
+      </h5>
+      <p class="mb-1 text-light"><i class="bi bi-book me-2 text-secondary"></i><strong>Subject:</strong> ${file.subject}</p>
+      <p class="mb-1 text-light"><i class="bi bi-people-fill me-2 text-secondary"></i><strong>Class:</strong> ${file.class}</p>
+      <p class="mb-1 text-light"><i class="bi bi-cash-coin me-2 text-warning"></i><strong>Price:</strong> KES ${file.price}</p>
     </div>
-    <div class="d-flex justify-content-between mt-auto">
-      <button class="btn btn-pay btn-sm px-2 py-1" onclick="payFor('${file.filename}', this)">Pay</button>
-      <button class="btn btn-download btn-sm px-2 py-1" disabled>Download</button>
+    <div class="d-flex justify-content-between gap-2 mt-auto">
+      <button class="btn btn-outline-success w-50 py-2 fw-semibold btn-hover" style="font-size: 0.95rem;" onclick="payFor('${file.filename}', this)">
+        <i class="bi bi-credit-card-2-front"></i> Pay
+      </button>
+      <button class="btn btn-outline-primary w-50 py-2 fw-semibold btn-hover" style="font-size: 0.95rem;" disabled>
+        <i class="bi bi-cloud-download"></i> Download
+      </button>
     </div>
-  </div>`;
+  </div>
+`;
 
       if (file.type && file.type.toLowerCase() === "revision") {
         revisionList.appendChild(card);
