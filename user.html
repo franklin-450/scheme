@@ -145,41 +145,45 @@
             }, 5000);
         });
 
-        async function loadSchemes() {
-            try {
-                const res = await fetch("https://server-1-bmux.onrender.com/api/files");
-                const files = await res.json();
-                const schemeList = document.getElementById("scheme-list");
-                const revisionList = document.getElementById("revision-list");
+async function loadSchemes() {
+  try {
+    const res = await fetch("https://server-1-bmux.onrender.com/api/files");
+    const files = await res.json();
+    const schemeList = document.getElementById("scheme-list");
+    const revisionList = document.getElementById("revision-list");
 
-                files.forEach(file => {
-                    const card = document.createElement("div");
-                    card.className = "col-md-4 mb-4";
+    schemeList.innerHTML = '';
+    revisionList.innerHTML = '';
 
-                    card.innerHTML = `
-          <div class="card p-3 h-100 d-flex flex-column justify-content-between">
-            <div>
-              <h5>${file.title}</h5>
-              <p><strong>Subject:</strong> ${file.subject}</p>
-              <p><strong>Class:</strong> ${file.class}</p>
-              <p><strong>Price:</strong> KES ${file.price}</p>
-            </div>
-            <div class="d-flex justify-content-between">
-              <button class="btn btn-pay btn-sm" onclick="payFor('${file.filename}', this)">Pay First</button>
-              <button class="btn btn-download btn-sm" disabled>Download</button>
-            </div>
-          </div>`;
+    files.forEach(file => {
+      const card = document.createElement("div");
+      card.className = "col-md-4 mb-4";
 
-                    if ((file.title + file.subject).toLowerCase().includes("revision")) {
-                        revisionList.appendChild(card);
-                    } else {
-                        schemeList.appendChild(card);
-                    }
-                });
-            } catch (err) {
-                Swal.fire("Error", "Failed to load schemes", "error");
-            }
-        }
+      card.innerHTML = `
+        <div class="card p-3 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <h5>${file.title}</h5>
+            <p><strong>Subject:</strong> ${file.subject}</p>
+            <p><strong>Class:</strong> ${file.class}</p>
+            <p><strong>Price:</strong> KES ${file.price}</p>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-pay btn-sm" onclick="payFor('${file.filename}', this)">Pay First</button>
+            <button class="btn btn-download btn-sm" disabled>Download</button>
+          </div>
+        </div>`;
+
+      if (file.type && file.type.toLowerCase() === "revision") {
+        revisionList.appendChild(card);
+      } else {
+        schemeList.appendChild(card);
+      }
+    });
+  } catch (err) {
+    Swal.fire("Error", "Failed to load schemes", "error");
+  }
+}
+
 
         function loadMyDownloads() {
             const saved = JSON.parse(localStorage.getItem('downloads') || '[]');
