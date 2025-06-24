@@ -96,10 +96,13 @@
                 placeholder="🔍 Search by title, subject or class..." oninput="filterSchemes()">
         </div>
     </div>
-    <h2 class="text-center mb-4" data-aos="fade-up">🛍 Available Schemes</h2>
 
     <div class="container">
+        <h2 class="text-center mb-4" data-aos="fade-up">🛍 Available Schemes</h2>
         <div class="row" id="scheme-list"></div>
+
+        <h2 class="text-center my-5" data-aos="fade-up">📝 Revision Papers</h2>
+        <div class="row" id="revision-list"></div>
     </div>
 
     <footer>
@@ -147,6 +150,7 @@
                 const res = await fetch("https://server-1-bmux.onrender.com/api/files");
                 const files = await res.json();
                 const schemeList = document.getElementById("scheme-list");
+                const revisionList = document.getElementById("revision-list");
 
                 files.forEach(file => {
                     const card = document.createElement("div");
@@ -166,7 +170,11 @@
             </div>
           </div>`;
 
-                    schemeList.appendChild(card);
+                    if ((file.title + file.subject).toLowerCase().includes("revision")) {
+                        revisionList.appendChild(card);
+                    } else {
+                        schemeList.appendChild(card);
+                    }
                 });
             } catch (err) {
                 Swal.fire("Error", "Failed to load schemes", "error");
@@ -197,7 +205,7 @@
 
         function filterSchemes() {
             const input = document.getElementById('searchBox').value.toLowerCase();
-            const cards = document.querySelectorAll('#scheme-list .card');
+            const cards = document.querySelectorAll('#scheme-list .card, #revision-list .card');
 
             cards.forEach(card => {
                 const text = card.innerText.toLowerCase();
