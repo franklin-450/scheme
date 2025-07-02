@@ -9,36 +9,81 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-body {
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-  color: white;
+<style>body {
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  color: #f1f1f1;
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-  .background-slide {
-    display: none; /* we are using full bg color now */
-  }
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  color: #e0f7fa;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 280px;
+}
 
-  .card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 1rem;
-    color: white;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    transition: transform 0.3s ease;
-    min-height: 260px;
-  }
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
 
-  .card:hover {
-    transform: translateY(-6px);
-  }
+.card h5 {
+  color: #90caf9;
+}
 
-  .btn-pay, .btn-download {
-    border: none;
-  }
+.card p {
+  font-size: 0.95rem;
+  color: #cfd8dc;
+}
+
+.btn-pay {
+  background-color: #00c853;
+  color: white;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-pay:hover {
+  background-color: #00e676;
+}
+
+.btn-download {
+  background-color: #2962ff;
+  color: white;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-download:hover {
+  background-color: #448aff;
+}
+
+.btn:disabled {
+  background-color: #999 !important;
+  cursor: not-allowed;
+}
+
+input.form-control {
+  background-color: #263238;
+  border: 1px solid #455a64;
+  color: #ffffff;
+  border-radius: 0.5rem;
+}
+
+input.form-control::placeholder {
+  color: #b0bec5;
+}
+
     .hero-overlay {
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
@@ -157,18 +202,20 @@ async function loadSchemes() {
       card.className = "col-md-4 mb-4";
 
 card.innerHTML = `
-  <div class="card p-3 h-100 d-flex flex-column justify-content-between">
+  <div class="card shadow-lg border-0 p-3 h-100 d-flex flex-column justify-content-between bg-gradient" style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(8px);">
     <div>
-      <h5>${file.title}</h5>
-      <p><strong>Subject:</strong> ${file.subject}</p>
-      <p><strong>Class:</strong> ${file.class}</p>
-      <p><strong>Price:</strong> KES ${file.price}</p>
+      <h5 class="fw-bold text-white"><i class="bi bi-journal-richtext me-2"></i>${file.title}</h5>
+      <p class="mb-1 text-light"><i class="bi bi-book-half me-2 text-warning"></i><strong>Subject:</strong> ${file.subject}</p>
+      <p class="mb-1 text-light"><i class="bi bi-mortarboard me-2 text-info"></i><strong>Class:</strong> ${file.class}</p>
+      <p class="mb-1 text-light"><i class="bi bi-cash-coin me-2 text-success"></i><strong>Price:</strong> <span class="text-warning">KES ${file.price}</span></p>
     </div>
-    <div class="d-flex justify-content-between align-items-center">
-      <button class="btn btn-pay btn-sm" onclick="payFor('${file.filename}', this)">
-        <i class="bi bi-paypal"></i> Pay First
+    <div class="d-grid gap-2 mt-3">
+      <button class="btn btn-outline-warning btn-lg rounded-pill fw-semibold" onclick="payFor('${file.filename}', this)">
+        <i class="bi bi-phone-fill"></i> Pay via M-Pesa
       </button>
-      <button class="btn btn-download btn-sm" disabled>Download</button>
+      <button class="btn btn-outline-light btn-sm rounded-pill" disabled>
+        <i class="bi bi-lock-fill"></i> Download locked
+      </button>
     </div>
   </div>`;
 
