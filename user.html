@@ -84,9 +84,6 @@ body {
     <div class="hero-overlay text-white">
         <h1 data-aos="fade-down">📚 Learning Resource Hub</h1>
         <p data-aos="fade-up">Buy your package before downloading – powered by Fintech Super Companies</p>
-        <div class="alert alert-success mt-4" role="alert" style="font-size: 1.1rem;">
-  🔓 All downloads are <strong>100% FREE</strong> until <strong>Monday, July 1st</strong>! No payment required.
-</div>
 
     </div>
 
@@ -168,10 +165,13 @@ card.innerHTML = `
       <p><strong>Price:</strong> KES ${file.price}</p>
     </div>
     <div class="d-flex justify-content-between align-items-center">
-      <span class="text-success"><i class="bi bi-unlock-fill"></i> Free This Week</span>
-      <a class="btn btn-download btn-sm" href="https://server-1-bmux.onrender.com/api/files/${file.filename}" download>Download</a>
+      <button class="btn btn-pay btn-sm" onclick="payFor('${file.filename}', this)">
+        <i class="bi bi-paypal"></i> Pay First
+      </button>
+      <button class="btn btn-download btn-sm" disabled>Download</button>
     </div>
   </div>`;
+
 
       if (file.type && file.type.toLowerCase() === "revision") {
         revisionList.appendChild(card);
