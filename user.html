@@ -276,17 +276,22 @@ card.innerHTML = `
                         Swal.showValidationMessage('Invalid Safaricom number!');
                     }
                 }
-            }).then(result => {
-                if (result.isConfirmed) {
-                    Swal.fire({ title: 'Sending STK Push...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+            })..then(result => {
+    if (result.isConfirmed) {
+        Swal.fire({ title: 'Sending STK Push...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
-                    fetch('https://server-1-bmux.onrender.com/api/pay', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ phone: result.value, filename })
-                    })
-                        .then(res => res.json())
-                        .then(data => {
+        const formattedPhone = result.value.startsWith("07")
+            ? "254" + result.value.slice(1)
+            : result.value;
+
+        fetch('https://server-1-bmux.onrender.com/api/pay', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: formattedPhone, filename })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // handle success/failure here...
                             if (data.success) {
                                 Swal.close();
                                 Swal.fire('Success', 'Payment confirmed. Download unlocked.', 'success');
