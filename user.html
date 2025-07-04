@@ -276,7 +276,7 @@ card.innerHTML = `
                         Swal.showValidationMessage('Invalid Safaricom number!');
                     }
                 }
-            })..then(result => {
+            }).then(result => {
     if (result.isConfirmed) {
         Swal.fire({ title: 'Sending STK Push...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
