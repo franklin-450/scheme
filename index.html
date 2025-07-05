@@ -3,64 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EduTrack KE - Smart Resource Hub</title>
+  <title>EduTrack KE & Smart Mind Portal</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet"/>
+
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       font-family: 'Poppins', sans-serif;
-      background-color: #000;
       overflow: hidden;
+      background-color: black;
     }
 
-    .bg-rotator {
+    #bg-rotator {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
+      z-index: -2;
       transition: background-image 1s ease-in-out;
     }
 
     .overlay {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: -1;
     }
 
     .hero-content {
       position: relative;
       z-index: 1;
-      text-align: center;
       padding: 5% 2rem;
-      color: #fff;
+      color: white;
+      text-align: center;
     }
 
     .hero-content h1 {
       font-size: 2.8rem;
-      color: #00e6e6;
+      color: #00ffff;
       font-weight: 700;
     }
 
     .hero-content p {
       font-size: 1.1rem;
       max-width: 900px;
-      margin: 1.5rem auto 2rem;
-      color: #ddd;
+      margin: 2rem auto;
+      line-height: 1.9;
+      color: #e0e0e0;
     }
 
     .btn-scheme {
       padding: 12px 30px;
-      font-size: 1rem;
+      font-size: 1.1rem;
       background-color: #00c9a7;
       border: none;
       border-radius: 10px;
@@ -74,62 +77,89 @@
       transform: scale(1.05);
     }
 
+    .flag-watermark {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      opacity: 0.2;
+      z-index: 0;
+      height: 100px;
+    }
+
+    .hidden-link {
+      background: none;
+      border: none;
+      color: inherit;
+      font-size: inherit;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: none;
+    }
+
+    .hidden-link:hover {
+      text-decoration: underline;
+    }
+
     footer {
       text-align: center;
       font-size: 0.9rem;
       color: #ccc;
-      padding: 1rem;
-      z-index: 1;
+      padding: 1.5rem 0;
       position: relative;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <div class="bg-rotator" id="bg-rotator"></div>
+  <div id="bg-rotator"></div>
   <div class="overlay"></div>
 
   <div class="hero-content">
-    <h1>📘 EduTrack KE - Empowering Educators</h1>
+    <h1>📘 EduTrack KE & Smart Mind</h1>
     <p>
-      EduTrack KE is a platform to download CBC & IGCSE schemes and revision papers.
-      It supports online & offline access, mobile-first design, and M-Pesa payments.
+      <strong>EduTrack KE</strong> empowers teachers across Kenya with access to premium, curriculum-aligned resources such as schemes of work, revision papers, and exam prep documents. It supports CBC, IGCSE, and more. Downloads are instant, M-Pesa is integrated, and offline mode is supported.
       <br><br>
-      📚 <strong>Smart Mind</strong> is our pure learning platform — no downloads needed. Study live, revise fast.
+      <strong>Smart Mind</strong> is a live learning portal for students. It offers well-organized online notes by subject and grade — no downloads needed. Learners revise smartly, directly from the browser, anytime, anywhere.
+      <br><br>
+      With EduTrack, teachers plan better. With Smart Mind, students learn smarter. This dual-platform ecosystem is built for the future of Kenyan education — created by Wizard Franky, for you.
     </p>
 
     <div class="d-flex justify-content-center flex-wrap">
       <a href="user.html">
-        <button class="btn-scheme">📥 Download Schemes</button>
+        <button class="btn-scheme">📥 Download from EduTrack</button>
       </a>
       <a href="https://smart-mind1.netlify.app" target="_blank">
-        <button class="btn-scheme" style="background-color:#3e64ff;">🎓 Learn on Smart Mind</button>
+        <button class="btn-scheme" style="background-color:#3e64ff;">🎓 Learn via Smart Mind</button>
       </a>
     </div>
   </div>
 
   <footer>
-    &copy; 2025 EduTrack KE — Powered by Wizard Franky. All rights reserved.
+    &copy; 2025 EduTrack KE & Smart Mind — Empowering Kenya’s classrooms.
+    <br>
+    For support, <span>visit <button class="hidden-link" onclick="window.location.href='admin.html'">this resource</button>.</span>
   </footer>
+
+  <img class="flag-watermark" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Kenya.svg/2560px-Flag_of_Kenya.svg.png" alt="Kenya Flag" />
 
   <script>
     const images = [
-      'https://images.unsplash.com/photo-1581091215367-1e7e1f3b5b92?auto=format&fit=crop&w=1920&q=80',
       'https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1920&q=80'
+      'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1544716278-e513176f20b5?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80'
     ];
-
     let index = 0;
-    const rotator = document.getElementById('bg-rotator');
+    const bgRotator = document.getElementById('bg-rotator');
 
     function rotateBackground() {
-      rotator.style.backgroundImage = `url('${images[index]}')`;
+      bgRotator.style.backgroundImage = `url('${images[index]}')`;
       index = (index + 1) % images.length;
     }
 
-    // Rotate every 9 seconds
-    rotateBackground();
-    setInterval(rotateBackground, 9000);
+    rotateBackground(); // show first image
+    setInterval(rotateBackground, 10000); // every 10 sec
   </script>
 </body>
 </html>
