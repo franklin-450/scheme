@@ -8,88 +8,75 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet"/>
 
   <style>
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      height: 100%;
       font-family: 'Poppins', sans-serif;
-      overflow: hidden;
-      background-color: black;
-    }
-
-    #bg-rotator {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+        url('https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      z-index: -2;
-      transition: background-image 1s ease-in-out;
+      color: #fff;
     }
 
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: -1;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      padding: 5% 2rem;
-      color: white;
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       text-align: center;
+      padding: 4rem 2rem;
     }
 
-    .hero-content h1 {
-      font-size: 2.8rem;
+    h1 {
+      font-size: 3rem;
       color: #00ffff;
       font-weight: 700;
     }
 
-    .hero-content p {
+    p {
       font-size: 1.1rem;
       max-width: 900px;
       margin: 2rem auto;
-      line-height: 1.9;
+      line-height: 1.8;
       color: #e0e0e0;
+    }
+
+    .btn-group {
+      margin-top: 2rem;
     }
 
     .btn-scheme {
       padding: 12px 30px;
       font-size: 1.1rem;
-      background-color: #00c9a7;
+      margin: 10px;
       border: none;
       border-radius: 10px;
-      margin: 0 10px;
       color: white;
       transition: all 0.3s ease;
     }
 
-    .btn-scheme:hover {
-      background-color: #009e82;
+    .btn-edutrack {
+      background-color: #00c9a7;
+    }
+
+    .btn-edutrack:hover {
+      background-color: #00a28c;
       transform: scale(1.05);
     }
 
-    .flag-watermark {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      opacity: 0.2;
-      z-index: 0;
-      height: 100px;
+    .btn-smartmind {
+      background-color: #3e64ff;
+    }
+
+    .btn-smartmind:hover {
+      background-color: #294bdb;
+      transform: scale(1.05);
     }
 
     .hidden-link {
       background: none;
       border: none;
-      color: inherit;
+      color: #ccc;
       font-size: inherit;
       font-family: inherit;
       cursor: pointer;
@@ -104,33 +91,29 @@
     footer {
       text-align: center;
       font-size: 0.9rem;
-      color: #ccc;
-      padding: 1.5rem 0;
-      position: relative;
-      z-index: 1;
+      color: #bbb;
+      padding: 2rem 0;
     }
   </style>
 </head>
 <body>
-  <div id="bg-rotator"></div>
-  <div class="overlay"></div>
 
-  <div class="hero-content">
+  <div class="hero">
     <h1>📘 EduTrack KE & Smart Mind</h1>
     <p>
-      <strong>EduTrack KE</strong> empowers teachers across Kenya with access to premium, curriculum-aligned resources such as schemes of work, revision papers, and exam prep documents. It supports CBC, IGCSE, and more. Downloads are instant, M-Pesa is integrated, and offline mode is supported.
+      <strong>EduTrack KE</strong> is your go-to platform for downloading smartly curated Schemes of Work and Revision Papers tailored for CBC, IGCSE, and Kenyan schools. Fast, secure, and M-Pesa integrated for easy teacher access.
       <br><br>
-      <strong>Smart Mind</strong> is a live learning portal for students. It offers well-organized online notes by subject and grade — no downloads needed. Learners revise smartly, directly from the browser, anytime, anywhere.
+      <strong>Smart Mind</strong> is a pure learning portal — no downloads needed. Students can study and revise notes for every subject and grade directly in the browser. It's fast, smooth, and tailored for smart learners.
       <br><br>
-      With EduTrack, teachers plan better. With Smart Mind, students learn smarter. This dual-platform ecosystem is built for the future of Kenyan education — created by Wizard Franky, for you.
+      Together, these platforms deliver a complete digital classroom for Kenya’s education revolution.
     </p>
 
-    <div class="d-flex justify-content-center flex-wrap">
+    <div class="btn-group">
       <a href="user.html">
-        <button class="btn-scheme">📥 Download from EduTrack</button>
+        <button class="btn-scheme btn-edutrack">📥 Download from EduTrack</button>
       </a>
       <a href="https://smart-mind1.netlify.app" target="_blank">
-        <button class="btn-scheme" style="background-color:#3e64ff;">🎓 Learn via Smart Mind</button>
+        <button class="btn-scheme btn-smartmind">🎓 Learn via Smart Mind</button>
       </a>
     </div>
   </div>
@@ -141,25 +124,5 @@
     For support, <span>visit <button class="hidden-link" onclick="window.location.href='admin.html'">this resource</button>.</span>
   </footer>
 
-  <img class="flag-watermark" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Kenya.svg/2560px-Flag_of_Kenya.svg.png" alt="Kenya Flag" />
-
-  <script>
-    const images = [
-      'https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1544716278-e513176f20b5?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80'
-    ];
-    let index = 0;
-    const bgRotator = document.getElementById('bg-rotator');
-
-    function rotateBackground() {
-      bgRotator.style.backgroundImage = `url('${images[index]}')`;
-      index = (index + 1) % images.length;
-    }
-
-    rotateBackground(); // show first image
-    setInterval(rotateBackground, 10000); // every 10 sec
-  </script>
 </body>
 </html>
