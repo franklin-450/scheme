@@ -12,7 +12,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+      background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
         url('https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
@@ -23,34 +23,40 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
       text-align: center;
       padding: 4rem 2rem;
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       color: #00ffff;
       font-weight: 700;
     }
 
     p {
-      font-size: 1.1rem;
+      font-size: 1rem;
       max-width: 900px;
       margin: 2rem auto;
       line-height: 1.8;
       color: #e0e0e0;
     }
 
-    .btn-group {
+    .btn-group-custom {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
       margin-top: 2rem;
     }
 
     .btn-scheme {
-      padding: 12px 30px;
+      padding: 14px 30px;
       font-size: 1.1rem;
-      margin: 10px;
+      width: 90%;
+      max-width: 300px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       color: white;
       transition: all 0.3s ease;
     }
@@ -61,7 +67,7 @@
 
     .btn-edutrack:hover {
       background-color: #00a28c;
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
     .btn-smartmind {
@@ -70,7 +76,7 @@
 
     .btn-smartmind:hover {
       background-color: #294bdb;
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
     .hidden-link {
@@ -92,7 +98,7 @@
       text-align: center;
       font-size: 0.9rem;
       color: #bbb;
-      padding: 2rem 0;
+      padding: 2rem 1rem;
     }
   </style>
 </head>
@@ -101,14 +107,14 @@
   <div class="hero">
     <h1>📘 EduTrack KE & Smart Mind</h1>
     <p>
-      <strong>EduTrack KE</strong> is your go-to platform for downloading smartly curated Schemes of Work and Revision Papers tailored for CBC, IGCSE, and Kenyan schools. Fast, secure, and M-Pesa integrated for easy teacher access.
+      <strong>EduTrack KE</strong> is Kenya's smart platform for downloading CBC, IGCSE, and Secondary School Schemes of Work and Revision Papers — with M-Pesa access, offline downloads, and teacher tools.
       <br><br>
-      <strong>Smart Mind</strong> is a pure learning portal — no downloads needed. Students can study and revise notes for every subject and grade directly in the browser. It's fast, smooth, and tailored for smart learners.
+      <strong>Smart Mind</strong> is a learning-only platform. Students get curated subject notes directly in-browser — no downloads required. It’s instant, mobile-ready, and optimized for learners on the go.
       <br><br>
-      Together, these platforms deliver a complete digital classroom for Kenya’s education revolution.
+      These platforms work together to give students and teachers what they need — from structured planning to smart revision.
     </p>
 
-    <div class="btn-group">
+    <div class="btn-group-custom">
       <a href="user.html">
         <button class="btn-scheme btn-edutrack">📥 Download from EduTrack</button>
       </a>
@@ -119,8 +125,7 @@
   </div>
 
   <footer>
-    &copy; 2025 EduTrack KE & Smart Mind — Empowering Kenya’s classrooms.
-    <br>
+    &copy; 2025 EduTrack KE & Smart Mind — Empowering Kenya’s classrooms.<br>
     For support, <span>visit <button class="hidden-link" onclick="window.location.href='admin.html'">this resource</button>.</span>
   </footer>
 
