@@ -3,171 +3,133 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EduTrack KE - Learning resources Portal</title>
-
-  <!-- SEO & Social Media -->
-  <meta name="description" content="Download and manage academic resources of work for CBC, IGCSE, and more. EduTrack KE makes it easy for teachers to access smart, curriculum-aligned resources.">
-  <meta name="keywords" content="schemes of work, CBC, IGCSE, Kenya curriculum, teacher resources, education platform, EduTrack, Grade 9, secondary school">
-  <meta name="author" content="Wizard Franky">
-  <meta name="robots" content="index, follow">
-  <meta property="og:title" content="EduTrack KE - Scheme of Work Platform">
-  <meta property="og:description" content="Smart school platform for downloading CBC, IGCSE, and other academic schemes.">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=1200&q=80">
-  <meta property="og:url" content="https://schemehub.netlify.app">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://schemehub.netlify.app">
-
-  <!-- Styles -->
+  <title>EduTrack KE - Smart Resource Hub</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-html, body {
-  height: 100%;
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: background-image 1s ease-in-out;
-}
-
-
-    .container-hero {
-      background-color: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    html, body {
+      margin: 0;
+      padding: 0;
       height: 100%;
-      padding: 2rem;
+      font-family: 'Poppins', sans-serif;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    .bg-rotator {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background-image 1s ease-in-out;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
       text-align: center;
+      padding: 5% 2rem;
+      color: #fff;
     }
 
-    header h1 {
-      font-size: 3rem;
+    .hero-content h1 {
+      font-size: 2.8rem;
+      color: #00e6e6;
       font-weight: 700;
-      color: #00d4ff;
-      margin-bottom: 1rem;
     }
 
-    header p {
-      max-width: 900px;
-      margin: auto;
+    .hero-content p {
       font-size: 1.1rem;
-      line-height: 1.9;
-      color: #e0e0e0;
-    }
-
-    .center-button {
-      margin-top: 3rem;
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 1.5rem auto 2rem;
+      color: #ddd;
     }
 
     .btn-scheme {
-      padding: 15px 40px;
-      font-size: 1.2rem;
+      padding: 12px 30px;
+      font-size: 1rem;
       background-color: #00c9a7;
       border: none;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,201,167,0.4);
-      color: #fff;
+      border-radius: 10px;
+      margin: 0 10px;
+      color: white;
       transition: all 0.3s ease;
     }
 
     .btn-scheme:hover {
-      background-color: #00b295;
+      background-color: #009e82;
       transform: scale(1.05);
     }
 
     footer {
       text-align: center;
       font-size: 0.9rem;
-      color: #bbb;
-      padding: 20px 0;
-    }
-
-    .hidden-link {
-      background: none;
-      border: none;
-      color: inherit;
-      font-size: inherit;
-      font-family: inherit;
-      cursor: pointer;
-      padding: 0;
-      text-decoration: none;
-    }
-
-    .hidden-link:hover {
-      text-decoration: underline;
+      color: #ccc;
+      padding: 1rem;
+      z-index: 1;
+      position: relative;
     }
   </style>
 </head>
 <body>
-  <div class="container-hero">
-<header>
-  <h1>📘 EduTrack KE - Smart Learning Resource Portal</h1>
-  <p>
-    <strong>EduTrack KE</strong> is a digital academic marketplace tailored for educators. It offers well-structured 
-    <strong>schemes of work</strong> and <strong>revision papers</strong> for CBC, IGCSE, and other curricula — ready for download at a small fee. 
-    Whether you’re teaching in urban or rural Kenya, EduTrack KE empowers you to plan with confidence, speed, and compliance.
-    <br><br>
-    Files are categorized, priced, and delivered instantly after secure M-Pesa payment. No subscriptions. Just pay and access. 
-    You can even choose offline M-Pesa payment using your file’s unique code.
-    <br><br>
-    🔁 Now introducing our sister platform — <strong>Smart Mind</strong>:
-    <br>
-    Smart Mind is your go-to **free learning platform** for students. No downloads. No payments. Just pure knowledge.
-    It provides interactive **learning notes**, structured by subject and grade, to help learners study smarter and faster.
-    With mobile-friendly pages and a distraction-free layout, it’s perfect for exam prep and classroom reinforcement.
-    <br><br>
-    💡 While EduTrack serves teachers with planning tools and premium documents, Smart Mind supports students with always-available learning content.
-    <br><br>
-    Together, they form a unified ecosystem — teaching meets learning, planning meets understanding.
-  </p>
-</header>
+  <div class="bg-rotator" id="bg-rotator"></div>
+  <div class="overlay"></div>
 
-<div class="center-button mt-4">
-  <a href="user.html">
-    <button class="btn-scheme">📥 Download Now</button>
-  </a>
-  <a href="https://smart-mind1.netlify.app" target="_blank">
-    <button class="btn-scheme ms-3" style="background-color:#3e64ff;">🎓 Visit Smart Mind</button>
-  </a>
-</div>
+  <div class="hero-content">
+    <h1>📘 EduTrack KE - Empowering Educators</h1>
+    <p>
+      EduTrack KE is a platform to download CBC & IGCSE schemes and revision papers.
+      It supports online & offline access, mobile-first design, and M-Pesa payments.
+      <br><br>
+      📚 <strong>Smart Mind</strong> is our pure learning platform — no downloads needed. Study live, revise fast.
+    </p>
 
-    <footer>
-      <p>
-        &copy; 2025 EduTrack KE — Empowering educators, transforming education.
-        <br>
-        For support, <span>visit <button class="hidden-link" onclick="window.location.href='admin.html'">this resource</button>.</span>
-      </p>
-    </footer>
+    <div class="d-flex justify-content-center flex-wrap">
+      <a href="user.html">
+        <button class="btn-scheme">📥 Download Schemes</button>
+      </a>
+      <a href="https://smart-mind1.netlify.app" target="_blank">
+        <button class="btn-scheme" style="background-color:#3e64ff;">🎓 Learn on Smart Mind</button>
+      </a>
+    </div>
   </div>
 
- <script>
-  const images = [
-    'https://images.unsplash.com/photo-1581091215367-1e7e1f3b5b92?auto=format&fit=crop&w=1600&q=80',
-    'https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=1600&q=80',
-    'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=80',
-    'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80'
-  ];
+  <footer>
+    &copy; 2025 EduTrack KE — Powered by Wizard Franky. All rights reserved.
+  </footer>
 
-  let index = 0;
+  <script>
+    const images = [
+      'https://images.unsplash.com/photo-1581091215367-1e7e1f3b5b92?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1920&q=80'
+    ];
 
-  function changeBackground() {
-    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0, 0, 0, 0.8)), url('${images[index]}')`;
-    index = (index + 1) % images.length;
-  }
+    let index = 0;
+    const rotator = document.getElementById('bg-rotator');
 
-  // Initial call
-  changeBackground();
+    function rotateBackground() {
+      rotator.style.backgroundImage = `url('${images[index]}')`;
+      index = (index + 1) % images.length;
+    }
 
-  // Rotate every 10 seconds
-  setInterval(changeBackground, 10000);
-</script>
-
+    // Rotate every 9 seconds
+    rotateBackground();
+    setInterval(rotateBackground, 9000);
+  </script>
 </body>
 </html>
