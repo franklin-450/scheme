@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login | Scheme of Work Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #000;
+    }
+
+    .slideshow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50vh;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: fade 24s infinite;
+    }
+
+    .slide:nth-child(2) {
+      animation-delay: 8s;
+    }
+
+    .slide:nth-child(3) {
+      animation-delay: 16s;
+    }
+
+    @keyframes fade {
+      0%, 100% { opacity: 0; }
+      10%, 30% { opacity: 1; }
+      40% { opacity: 0; }
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      color: #fff;
+      min-height: 50vh;
+      text-align: center;
+    }
+
+    .gradient-section {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      padding: 3rem 1rem;
+      min-height: 50vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-card {
+      background: #ffffffdd;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .form-control {
+      border-radius: 10px;
+    }
+
+    .btn-login {
+      background-color: #17a2b8;
+      color: white;
+      border: none;
+      width: 100%;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .btn-login:hover {
+      background-color: #138496;
+    }
+
+    .input-group-text {
+      background-color: #17a2b8;
+      color: white;
+      border: none;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background Slideshow -->
+  <div class="slideshow">
+    <img class="slide" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c" alt="slide1" />
+    <img class="slide" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b" alt="slide2" />
+    <img class="slide" src="https://images.unsplash.com/photo-1581091012184-7be9c5a6f6d1" alt="slide3" />
+  </div>
+
+  <!-- Top Section -->
+  <div class="overlay d-flex flex-column justify-content-center align-items-center">
+    <h1 class="display-5 fw-bold text-info"><i class="bi bi-shield-lock-fill"></i> Admin Login</h1>
+    <p class="lead text-white">Secure access to Scheme Uploads, Reports & Controls.</p>
+  </div>
+
+  <!-- Login Section -->
+  <div class="gradient-section">
+    <div class="login-card">
+      <h4 class="text-center fw-bold mb-4">Enter Admin Secret</h4>
+      <form id="adminLoginForm">
+        <div class="mb-3 input-group">
+          <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+          <input type="password" class="form-control" id="adminKey" placeholder="Admin Secret Key" required />
+        </div>
+        <button type="submit" class="btn btn-login mt-2"><i class="bi bi-door-open-fill me-2"></i>Login</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('adminLoginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const secret = document.getElementById('adminKey').value;
+
+      const response = await fetch('/api/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: secret })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful',
+          text: 'Redirecting to admin dashboard...',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        setTimeout(() => {
+          window.location.href = '/admin-dashboard.html';
+        }, 2000);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Access Denied',
+          text: 'Incorrect Admin Key',
+          footer: '<i class="bi bi-shield-exclamation text-warning"></i> Ensure the secret key is valid.'
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
