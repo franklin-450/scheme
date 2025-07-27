@@ -220,8 +220,8 @@ input.form-control::placeholder {
             </div>
             <div class="d-grid gap-2 mt-3">
               <button class="btn btn-outline-warning btn-sm rounded-pill fw-semibold"
-                      onclick="payFor('${file.filename}', this)">
-                <i class="bi bi-envelope-check-fill me-1"></i> Verify Email
+                      onclick="promptAndVerify('${file.filename}', this)">
+                <i class="bi bi-envelope-check-fill me-1"></i> Verify / Download
               </button>
               <button class="btn btn-outline-success btn-lg rounded-pill fw-bold" disabled>
                 <i class="bi bi-cloud-arrow-down-fill me-1"></i> Download File
@@ -240,17 +240,74 @@ input.form-control::placeholder {
     }
   }
 
+  function promptAndVerify(filename, btn) {
+    Swal.fire({
+      title: 'Enter Email to Access File',
+      input: 'email',
+      inputPlaceholder: 'your-email@example.com',
+      showCancelButton: true,
+      confirmButtonText: 'Verify Access',
+      preConfirm: (email) => {
+        if (!email || !email.includes('@')) {
+          Swal.showValidationMessage('Please enter a valid email address.');
+        }
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        const email = result.value.trim();
+        Swal.fire({ title: 'Verifying...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+        fetch('https://server-1-bmux.onrender.com/api/verify-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, filename })
+        })
+        .then(res => res.json())
+        .then(data => {
+          Swal.close();
+          if (data.access === 'granted' && data.token) {
+            Swal.fire('Access Granted ✅', 'Download started.', 'success');
+
+            const downloadBtn = btn.nextElementSibling;
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = `
+              <a class="text-white text-decoration-none fw-bold"
+                 href="https://server-1-bmux.onrender.com/files/${filename}?token=${data.token}" download>
+                <i class="bi bi-cloud-arrow-down-fill me-1"></i> Click to Download
+              </a>`;
+
+            const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
+            if (!downloads.some(d => d.filename === filename)) {
+              downloads.push({ filename, token: data.token });
+              localStorage.setItem('downloads', JSON.stringify(downloads));
+            }
+
+            loadMyDownloads();
+          } else {
+            Swal.fire('Access Denied ❌', 'Email not authorized.', 'error');
+          }
+        })
+        .catch(err => {
+          Swal.fire('Error', 'Server error. Try again later.', 'error');
+        });
+      }
+    });
+  }
+
   function loadMyDownloads() {
     const saved = JSON.parse(localStorage.getItem('downloads') || '[]');
     if (!saved.length) return;
 
-    const section = document.createElement('div');
-    section.innerHTML = `
-      <h3 class="mt-5 text-center text-white">📜 My Downloads</h3>
-      <div class="row mt-3" id="my-downloads"></div>`;
-    document.querySelector('.container').appendChild(section);
+    if (!document.getElementById('my-downloads')) {
+      const section = document.createElement('div');
+      section.innerHTML = `
+        <h3 class="mt-5 text-center text-white">📜 My Downloads</h3>
+        <div class="row mt-3" id="my-downloads"></div>`;
+      document.querySelector('.container').appendChild(section);
+    }
 
     const list = document.getElementById('my-downloads');
+    list.innerHTML = '';
     saved.forEach(item => {
       const card = document.createElement('div');
       card.className = 'col-md-4 mb-4';
@@ -274,54 +331,6 @@ input.form-control::placeholder {
     cards.forEach(card => {
       const text = card.innerText.toLowerCase();
       card.parentElement.style.display = text.includes(input) ? 'block' : 'none';
-    });
-  }
-
-  function payFor(filename, btn) {
-    Swal.fire({
-      title: 'Enter Email to Access',
-      input: 'email',
-      inputPlaceholder: 'Enter your verified email',
-      confirmButtonText: 'Check Access',
-      showCancelButton: true,
-      preConfirm: (email) => {
-        if (!email || !email.includes('@')) {
-          Swal.showValidationMessage('Please enter a valid email.');
-        }
-      }
-    }).then(result => {
-      if (result.isConfirmed) {
-        const email = result.value;
-        Swal.fire({ title: 'Checking access...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
-
-        fetch('https://server-1-bmux.onrender.com/api/verify-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, filename })
-        })
-        .then(res => res.json())
-        .then(data => {
-          Swal.close();
-          if (data.access === 'granted') {
-            Swal.fire('Access Granted ✅', 'You can now download the file.', 'success');
-            const downloadBtn = btn.nextElementSibling;
-            downloadBtn.disabled = false;
-            downloadBtn.innerHTML = `
-              <a class="text-white text-decoration-none fw-bold"
-                 href="https://server-1-bmux.onrender.com/files/${filename}?token=${data.token}" download>
-                <i class="bi bi-cloud-arrow-down-fill me-1"></i> Click to Download
-              </a>`;
-
-            const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
-            downloads.push({ filename, token: data.token });
-            localStorage.setItem('downloads', JSON.stringify(downloads));
-
-            loadMyDownloads();
-          } else {
-            Swal.fire('Access Denied ❌', 'This email is not verified or has exceeded download limit.', 'error');
-          }
-        });
-      }
     });
   }
 
