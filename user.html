@@ -129,6 +129,11 @@ input.form-control::placeholder {
     <div class="hero-overlay text-white">
         <h1 data-aos="fade-down">📚 Learning Resource Hub</h1>
         <p data-aos="fade-up">Buy your package before downloading – powered by Fintech Super Companies</p>
+        <div class="alert alert-info text-dark text-center" role="alert">
+    💸 Pay KES 100 via M-Pesa to Buy Goods And Services Till <strong>247247</strong>  <br>
+    Then send the <strong>Transaction Code eg ( QIHEWYI7I ) </strong> & your email to <a href="https://wa.me/254798927321" target="_blank">WhatsApp here</a> to get verified.
+</div>
+
 
     </div>
 
@@ -151,171 +156,179 @@ input.form-control::placeholder {
         Powered by <strong>Fintech & Edutech</strong> — A Franklin's Product
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <script>
-        AOS.init();
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init();
 
-        const unsplashImages = [
-            'https://source.unsplash.com/featured/?school',
-            'https://source.unsplash.com/featured/?education',
-            'https://source.unsplash.com/featured/?students',
-            'https://source.unsplash.com/featured/?classroom'
-        ];
+  const unsplashImages = [
+    'https://source.unsplash.com/featured/?school',
+    'https://source.unsplash.com/featured/?education',
+    'https://source.unsplash.com/featured/?students',
+    'https://source.unsplash.com/featured/?classroom',
+    'https://source.unsplash.com/featured/?books',
+    'https://source.unsplash.com/featured/?library',
+    'https://source.unsplash.com/featured/?onlinelearning'
+  ];
 
-        let imgIndex = 0;
-        const backgroundDiv = document.getElementById('background-slide');
+  let imgIndex = 0;
+  const backgroundDiv = document.getElementById('background-slide');
 
-        function preloadImages(urls, callback) {
-            let loaded = 0;
-            urls.forEach(url => {
-                const img = new Image();
-                img.src = url;
-                img.onload = () => {
-                    if (++loaded === urls.length) callback();
-                };
-                img.onerror = () => {
-                    if (++loaded === urls.length) callback();
-                };
-            });
-        }
-
-        preloadImages(unsplashImages, () => {
-            backgroundDiv.style.backgroundImage = `url('${unsplashImages[imgIndex]}')`;
-            setInterval(() => {
-                imgIndex = (imgIndex + 1) % unsplashImages.length;
-                backgroundDiv.style.backgroundImage = `url('${unsplashImages[imgIndex]}')`;
-            }, 5000);
-        });
-
-async function loadSchemes() {
-  try {
-    const res = await fetch("https://server-1-bmux.onrender.com/api/files");
-    const files = await res.json();
-    const schemeList = document.getElementById("scheme-list");
-    const revisionList = document.getElementById("revision-list");
-
-    schemeList.innerHTML = '';
-    revisionList.innerHTML = '';
-
-    files.forEach(file => {
-      const card = document.createElement("div");
-      card.className = "col-md-4 mb-4";
-
-card.innerHTML = `
-  <div class="card shadow-lg border-0 p-3 h-100 d-flex flex-column justify-content-between bg-gradient" style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(8px);">
-    <div>
-      <h5 class="fw-bold text-white"><i class="bi bi-journal-richtext me-2"></i>${file.title}</h5>
-      <p class="mb-1 text-light"><i class="bi bi-book-half me-2 text-warning"></i><strong>Subject:</strong> ${file.subject}</p>
-      <p class="mb-1 text-light"><i class="bi bi-mortarboard me-2 text-info"></i><strong>Class:</strong> ${file.class}</p>
-      <p class="mb-1 text-light"><i class="bi bi-cash-coin me-2 text-success"></i><strong>Price:</strong> <span class="text-warning">KES ${file.price}</span></p>
-    </div>
-    <div class="d-grid gap-2 mt-3">
-      <button class="btn btn-outline-warning btn-lg rounded-pill fw-semibold" onclick="payFor('${file.filename}', this)">
-        <i class="bi bi-phone-fill"></i> Pay via M-Pesa
-      </button>
-      <button class="btn btn-outline-light btn-sm rounded-pill" disabled>
-        <i class="bi bi-lock-fill"></i> Download locked
-      </button>
-    </div>
-  </div>`;
-
-
-      if (file.type && file.type.toLowerCase() === "revision") {
-        revisionList.appendChild(card);
-      } else {
-        schemeList.appendChild(card);
-      }
+  function preloadImages(urls, callback) {
+    let loaded = 0;
+    urls.forEach(url => {
+      const img = new Image();
+      img.src = url;
+      img.onload = img.onerror = () => {
+        if (++loaded === urls.length) callback();
+      };
     });
-  } catch (err) {
-    Swal.fire("Error", "Failed to load schemes", "error");
   }
-}
 
+  preloadImages(unsplashImages, () => {
+    backgroundDiv.style.backgroundImage = `url('${unsplashImages[imgIndex]}')`;
+    setInterval(() => {
+      imgIndex = (imgIndex + 1) % unsplashImages.length;
+      backgroundDiv.style.backgroundImage = `url('${unsplashImages[imgIndex]}')`;
+    }, 5000);
+  });
 
-        function loadMyDownloads() {
-            const saved = JSON.parse(localStorage.getItem('downloads') || '[]');
-            if (!saved.length) return;
+  async function loadSchemes() {
+    try {
+      const res = await fetch("https://server-1-bmux.onrender.com/api/files");
+      const files = await res.json();
+      const schemeList = document.getElementById("scheme-list");
+      const revisionList = document.getElementById("revision-list");
 
-            const section = document.createElement('div');
-            section.innerHTML = `<h3 class="mt-5 text-center">📜 My Downloads</h3><div class="row mt-3" id="my-downloads"></div>`;
-            document.querySelector('.container').appendChild(section);
+      schemeList.innerHTML = '';
+      revisionList.innerHTML = '';
 
-            const list = document.getElementById('my-downloads');
-            saved.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'col-md-4 mb-4';
-                card.innerHTML = `
-        <div class="card p-3">
-          <h5>${item.filename}</h5>
-          <a class="btn btn-download" href="https://server-1-bmux.onrender.com/files/${item.filename}?token=${item.token}" download>Download Again</a>
-        </div>
-      `;
-                list.appendChild(card);
-            });
+      files.forEach(file => {
+        const card = document.createElement("div");
+        card.className = "col-md-4 mb-4";
+
+        card.innerHTML = `
+          <div class="card shadow-lg border-0 p-4 h-100 d-flex flex-column justify-content-between text-white bg-gradient"
+               style="background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(12px); border-radius: 20px;" data-aos="fade-up">
+            <div>
+              <h5 class="fw-bold mb-3">
+                <i class="bi bi-file-earmark-text me-2 text-primary"></i>${file.title}
+              </h5>
+              <p class="mb-2"><i class="bi bi-book me-2 text-warning"></i><strong>Subject:</strong> ${file.subject}</p>
+              <p class="mb-2"><i class="bi bi-person-video3 me-2 text-info"></i><strong>Class:</strong> ${file.class}</p>
+              <p class="mb-2"><i class="bi bi-calendar-week me-2 text-light"></i><strong>Uploaded:</strong> ${file.date || 'N/A'}</p>
+              <p class="mb-2"><i class="bi bi-tags-fill me-2 text-secondary"></i><strong>Type:</strong> ${file.type}</p>
+            </div>
+            <div class="d-grid gap-2 mt-3">
+              <button class="btn btn-outline-warning btn-sm rounded-pill fw-semibold"
+                      onclick="payFor('${file.filename}', this)">
+                <i class="bi bi-envelope-check-fill me-1"></i> Verify Email
+              </button>
+              <button class="btn btn-outline-success btn-lg rounded-pill fw-bold" disabled>
+                <i class="bi bi-cloud-arrow-down-fill me-1"></i> Download File
+              </button>
+            </div>
+          </div>`;
+
+        if (file.type && file.type.toLowerCase() === "revision") {
+          revisionList.appendChild(card);
+        } else {
+          schemeList.appendChild(card);
         }
+      });
+    } catch (err) {
+      Swal.fire("Error", "Failed to load schemes", "error");
+    }
+  }
 
-        function filterSchemes() {
-            const input = document.getElementById('searchBox').value.toLowerCase();
-            const cards = document.querySelectorAll('#scheme-list .card, #revision-list .card');
+  function loadMyDownloads() {
+    const saved = JSON.parse(localStorage.getItem('downloads') || '[]');
+    if (!saved.length) return;
 
-            cards.forEach(card => {
-                const text = card.innerText.toLowerCase();
-                card.parentElement.style.display = text.includes(input) ? 'block' : 'none';
-            });
+    const section = document.createElement('div');
+    section.innerHTML = `
+      <h3 class="mt-5 text-center text-white">📜 My Downloads</h3>
+      <div class="row mt-3" id="my-downloads"></div>`;
+    document.querySelector('.container').appendChild(section);
+
+    const list = document.getElementById('my-downloads');
+    saved.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'col-md-4 mb-4';
+      card.innerHTML = `
+        <div class="card p-4 border-0 shadow text-white"
+             style="background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(10px); border-radius: 18px;">
+          <h5><i class="bi bi-check-circle-fill me-2 text-success"></i>${item.filename}</h5>
+          <a class="btn btn-outline-light btn-sm rounded-pill mt-2"
+             href="https://server-1-bmux.onrender.com/files/${item.filename}?token=${item.token}" download>
+            <i class="bi bi-download me-1"></i> Download Again
+          </a>
+        </div>`;
+      list.appendChild(card);
+    });
+  }
+
+  function filterSchemes() {
+    const input = document.getElementById('searchBox').value.toLowerCase();
+    const cards = document.querySelectorAll('#scheme-list .card, #revision-list .card');
+
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.parentElement.style.display = text.includes(input) ? 'block' : 'none';
+    });
+  }
+
+  function payFor(filename, btn) {
+    Swal.fire({
+      title: 'Enter Email to Access',
+      input: 'email',
+      inputPlaceholder: 'Enter your verified email',
+      confirmButtonText: 'Check Access',
+      showCancelButton: true,
+      preConfirm: (email) => {
+        if (!email || !email.includes('@')) {
+          Swal.showValidationMessage('Please enter a valid email.');
         }
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        const email = result.value;
+        Swal.fire({ title: 'Checking access...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
-        function payFor(filename, btn) {
-            Swal.fire({
-                title: 'Enter Phone Number',
-                input: 'text',
-                inputPlaceholder: '07XXXXXXXX',
-                confirmButtonText: 'Pay Now',
-                showCancelButton: true,
-                preConfirm: (value) => {
-                    if (!/^07\d{8}$/.test(value)) {
-                        Swal.showValidationMessage('Invalid Safaricom number!');
-                    }
-                }
-            }).then(result => {
-    if (result.isConfirmed) {
-        Swal.fire({ title: 'Sending STK Push...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
-
-        const formattedPhone = result.value.startsWith("07")
-            ? "254" + result.value.slice(1)
-            : result.value;
-
-        fetch('https://server-1-bmux.onrender.com/api/pay', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone: formattedPhone, filename })
+        fetch('https://server-1-bmux.onrender.com/api/verify-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, filename })
         })
         .then(res => res.json())
         .then(data => {
-            // handle success/failure here...
-                            if (data.success) {
-                                Swal.close();
-                                Swal.fire('Success', 'Payment confirmed. Download unlocked.', 'success');
+          Swal.close();
+          if (data.access === 'granted') {
+            Swal.fire('Access Granted ✅', 'You can now download the file.', 'success');
+            const downloadBtn = btn.nextElementSibling;
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = `
+              <a class="text-white text-decoration-none fw-bold"
+                 href="https://server-1-bmux.onrender.com/files/${filename}?token=${data.token}" download>
+                <i class="bi bi-cloud-arrow-down-fill me-1"></i> Click to Download
+              </a>`;
 
-                                const downloadBtn = btn.nextElementSibling;
-                                downloadBtn.disabled = false;
-                                downloadBtn.innerHTML = `<a class="text-white text-decoration-none" href="https://server-1-bmux.onrender.com/api/files/${filename}?token=${data.token}" download>Download</a>`;
+            const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
+            downloads.push({ filename, token: data.token });
+            localStorage.setItem('downloads', JSON.stringify(downloads));
 
-                                const downloads = JSON.parse(localStorage.getItem('downloads') || '[]');
-                                downloads.push({ filename, token: data.token });
-                                localStorage.setItem('downloads', JSON.stringify(downloads));
+            loadMyDownloads();
+          } else {
+            Swal.fire('Access Denied ❌', 'This email is not verified or has exceeded download limit.', 'error');
+          }
+        });
+      }
+    });
+  }
 
-                                loadMyDownloads();
-                            } else {
-                                Swal.fire('Failed', 'Payment was not successful.', 'error');
-                            }
-                        });
-                }
-            });
-        }
+  loadSchemes();
+  loadMyDownloads();
+</script>
 
-        loadSchemes();
-        loadMyDownloads();
-    </script>
 </body>
 
 </html>
