@@ -2,163 +2,204 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Access Control</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Access Manager</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
   <style>
     body {
-      background: #0f0f0f;
-      color: #f8f9fa;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      background-color: black;
+      overflow-x: hidden;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
     .container {
-      max-width: 720px;
-      margin-top: 60px;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
     }
-    .card {
-      background: #1c1c1c;
-      border: 1px solid #333;
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
     }
-    .form-control, .btn {
-      border-radius: 0.5rem;
+    input, button {
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: none;
+      margin: 0.5rem;
+      border-radius: 5px;
     }
-    .table th, .table td {
-      vertical-align: middle;
+    input {
+      width: 250px;
+    }
+    button {
+      background-color: #1abc9c;
+      color: white;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      margin-top: 2rem;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #444;
+      text-align: left;
+    }
+    .delete-btn {
+      color: #e74c3c;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <h2 class="text-center mb-4"><i class="bi bi-shield-lock"></i> Access Manager</h2>
+  <canvas id="stars"></canvas>
+  <div class="container">
+    <h1><i class="fas fa-envelope"></i> Access Email Admin</h1>
+    <div>
+      <input type="email" id="email" placeholder="Enter email" required />
+      <input type="number" id="days" placeholder="Days (e.g. 5)" required />
+      <button onclick="addEmail()"><i class="fas fa-plus"></i> Add Email</button>
+    </div>
 
-  <div class="card p-4 mb-4">
-    <h5 class="mb-3">➕ Add Access Email</h5>
-    <form id="accessForm">
-      <div class="row g-2">
-        <div class="col-md-7">
-          <input type="email" class="form-control" id="email" placeholder="Enter Email" required />
-        </div>
-        <div class="col-md-3">
-          <input type="number" class="form-control" id="days" placeholder="Days" min="1" required />
-        </div>
-        <div class="col-md-2">
-          <button type="submit" class="btn btn-success w-100">
-            <i class="bi bi-plus-circle"></i>
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="card p-4">
-    <h5 class="mb-3">📄 Current Access List</h5>
-    <table class="table table-dark table-striped">
+    <table>
       <thead>
         <tr>
           <th>Email</th>
-          <th>Expires</th>
+          <th>Expiry</th>
           <th>Action</th>
         </tr>
       </thead>
-      <tbody id="accessList"></tbody>
+      <tbody id="emailTable"></tbody>
     </table>
   </div>
-</div>
 
-<script>
-  const API_URL = 'https://server-1-bmux.onrender.com/api/access';
+  <script>
+    const API_BASE = 'https://server-1-bmux.onrender.com/api/access';
 
-  const accessForm = document.getElementById('accessForm');
-  const emailInput = document.getElementById('email');
-  const daysInput = document.getElementById('days');
-  const accessList = document.getElementById('accessList');
+    function fetchEmails() {
+      fetch("https://server-1-bmux.onrender.com/api/access")
+        .then(res => res.json())
+        .then(data => {
+          const table = document.getElementById('emailTable');
+          table.innerHTML = '';
+          data.forEach(({ email, expiry }) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${email}</td>
+              <td>${new Date(expiry).toLocaleString()}</td>
+              <td><i class="fas fa-trash delete-btn" onclick="deleteEmail('${email}')"></i></td>
+            `;
+            table.appendChild(row);
+          });
+        })
+        .catch(() => Swal.fire('Error', 'Failed to fetch emails', 'error'));
+    }
 
-  async function loadAccessList() {
-    accessList.innerHTML = '<tr><td colspan="3">Loading...</td></tr>';
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      accessList.innerHTML = '';
-
-      if (!data.length) {
-        accessList.innerHTML = '<tr><td colspan="3">No entries found.</td></tr>';
+    function addEmail() {
+      const email = document.getElementById('email').value.trim();
+      const days = parseInt(document.getElementById('days').value.trim());
+      if (!email || isNaN(days)) {
+        Swal.fire('Invalid Input', 'Please enter valid email and days', 'warning');
         return;
       }
 
-      data.forEach(({ email, expiry }) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${email}</td>
-          <td>${new Date(expiry).toLocaleString()}</td>
-          <td>
-            <button class="btn btn-danger btn-sm" onclick="deleteEmail('${email}')">
-              <i class="bi bi-trash"></i>
-            </button>
-          </td>
-        `;
-        accessList.appendChild(row);
-      });
-    } catch (err) {
-      Swal.fire('Error', 'Failed to load access list.', 'error');
-    }
-  }
-
-  async function deleteEmail(email) {
-    const confirm = await Swal.fire({
-      title: 'Are you sure?',
-      text: `Remove ${email} from access?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#aaa',
-      confirmButtonText: 'Yes, delete it!'
-    });
-
-    if (confirm.isConfirmed) {
-      try {
-        const res = await fetch(`${API_URL}/${encodeURIComponent(email)}`, { method: 'DELETE' });
-        const result = await res.json();
-        if (result.success) {
-          Swal.fire('Deleted!', 'Email removed.', 'success');
-          loadAccessList();
-        } else {
-          Swal.fire('Error', result.error || 'Failed to delete', 'error');
-        }
-      } catch (err) {
-        Swal.fire('Error', 'Server error occurred.', 'error');
-      }
-    }
-  }
-
-  accessForm.onsubmit = async (e) => {
-    e.preventDefault();
-    const email = emailInput.value.trim();
-    const days = parseInt(daysInput.value.trim(), 10);
-
-    if (!email || !days) return;
-
-    try {
-      const res = await fetch(API_URL, {
+      fetch('https://server-1-bmux.onrender.com/api/access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, days })
-      });
-      const result = await res.json();
-      if (result.success) {
-        Swal.fire('Added!', 'Email has been granted access.', 'success');
-        accessForm.reset();
-        loadAccessList();
-      } else {
-        Swal.fire('Error', result.error || 'Failed to add email.', 'error');
-      }
-    } catch (err) {
-      Swal.fire('Error', 'Server error occurred.', 'error');
+      })
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) {
+          Swal.fire('Success', 'Email added successfully!', 'success');
+          fetchEmails();
+        } else {
+          Swal.fire('Error', result.error || 'Failed to add email', 'error');
+        }
+      })
+      .catch(() => Swal.fire('Error', 'Request failed', 'error'));
     }
-  };
 
-  // Load list on page load
-  loadAccessList();
-</script>
+    function deleteEmail(email) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `Delete access for ${email}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e74c3c',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`${API_BASE}/${encodeURIComponent(email)}`, { method: 'DELETE' })
+            .then(res => res.json())
+            .then(result => {
+              if (result.success) {
+                Swal.fire('Deleted!', 'Email removed.', 'success');
+                fetchEmails();
+              } else {a
+                Swal.fire('Error', result.error || 'Failed to delete', 'error');
+              }
+            });
+        }
+      });
+    }
+
+    // Starfield animation
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createStars() {
+      stars = [];
+      for (let i = 0; i < 150; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.5,
+          speed: Math.random() * 0.5 + 0.2
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'white';
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+        ctx.fill();
+        star.y += star.speed;
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+      });
+    }
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createStars();
+    });
+
+    resizeCanvas();
+    createStars();
+    setInterval(drawStars, 50);
+
+    fetchEmails();
+  </script>
 </body>
 </html>
