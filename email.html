@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Access Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border-radius: 15px;
+      border: none;
+    }
+    input, button {
+      border-radius: 10px !important;
+    }
+    .alert {
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <h2 class="text-center mb-4"><i class="bi bi-shield-lock-fill me-2"></i>Admin Email Access Manager</h2>
+
+    <!-- Alert -->
+    <div id="alertBox" class="alert d-none" role="alert"></div>
+
+    <!-- Add Email -->
+    <div class="card p-4 mb-4">
+      <h5 class="mb-3"><i class="bi bi-person-plus-fill me-2"></i>Add New Email</h5>
+      <div class="row g-2">
+        <div class="col-md-6">
+          <input id="emailInput" type="email" class="form-control" placeholder="Enter email..." required />
+        </div>
+        <div class="col-md-6">
+          <button onclick="addEmail()" class="btn btn-success w-100">
+            <i class="bi bi-plus-circle"></i> Add Email
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email List -->
+    <div class="card p-4">
+      <h5 class="mb-3"><i class="bi bi-list-ul me-2"></i>Current Allowed Emails</h5>
+      <ul class="list-group" id="emailList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const api = "https://server-1-bmux.onrender.com/api";
+
+    function showAlert(message, type = "success") {
+      const alertBox = document.getElementById("alertBox");
+      alertBox.className = `alert alert-${type}`;
+      alertBox.textContent = message;
+      alertBox.classList.remove("d-none");
+      setTimeout(() => alertBox.classList.add("d-none"), 4000);
+    }
+
+    async function fetchEmails() {
+      try {
+        const res = await fetch(`${api}/access-list`);
+        const data = await res.json();
+        const list = document.getElementById("emailList");
+        list.innerHTML = "";
+
+        data.forEach(email => {
+          const li = document.createElement("li");
+          li.className = "list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-white";
+          li.innerHTML = `
+            ${email}
+            <button onclick="deleteEmail('${email}')" class="btn btn-danger btn-sm">
+              <i class="bi bi-trash3-fill"></i>
+            </button>`;
+          list.appendChild(li);
+        });
+      } catch (error) {
+        showAlert("Failed to fetch emails", "danger");
+      }
+    }
+
+    async function addEmail() {
+      const email = document.getElementById("emailInput").value.trim();
+      if (!email) return showAlert("Enter a valid email", "warning");
+
+      try {
+        const res = await fetch(`${api}/access-add`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          showAlert("Email added successfully");
+          document.getElementById("emailInput").value = "";
+          fetchEmails();
+        } else {
+          showAlert(result.error || "Failed to add", "danger");
+        }
+      } catch (err) {
+        showAlert("Server error while adding", "danger");
+      }
+    }
+
+    async function deleteEmail(email) {
+      try {
+        const res = await fetch(`${api}/access-remove`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          showAlert("Email removed");
+          fetchEmails();
+        } else {
+          showAlert(result.error || "Error removing", "danger");
+        }
+      } catch (err) {
+        showAlert("Server error while removing", "danger");
+      }
+    }
+
+    window.onload = fetchEmails;
+  </script>
+</body>
+</html>
