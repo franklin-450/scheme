@@ -120,11 +120,49 @@ input.form-control::placeholder {
     padding: 2rem 1rem;
     margin-top: 2rem;
   }
+    body.sidebar-open::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+  }
 </style>
 </head>
 
 <body>
     <div class="background-slide" id="background-slide"></div>
+    <!-- Add the following HTML inside <body> but before .hero-overlay -->
+<div id="sidebar" class="position-fixed top-0 start-0 vh-100 bg-dark text-white p-3 d-flex flex-column"
+     style="width: 250px; z-index: 1050; transform: translateX(-100%); transition: transform 0.3s ease-in-out;">
+  <h4 class="mb-4">📁 Menu</h4>
+  <button class="btn btn-outline-light btn-sm mb-2" onclick="filterByClass('6')">
+    <i class="bi bi-funnel-fill me-1"></i> Grade 6
+  </button>
+  <button class="btn btn-outline-light btn-sm mb-2" onclick="filterByClass('7')">
+    <i class="bi bi-funnel-fill me-1"></i> Grade 7
+  </button>
+  <button class="btn btn-outline-light btn-sm mb-2" onclick="filterByClass('8')">
+    <i class="bi bi-funnel-fill me-1"></i> Grade 8
+  </button>
+  <button class="btn btn-outline-light btn-sm mb-4" onclick="filterByClass('9')">
+    <i class="bi bi-funnel-fill me-1"></i> Grade 9
+  </button>
+  <button class="btn btn-outline-info btn-sm mt-auto" onclick="loadMyDownloadsToggle()">
+    <i class="bi bi-folder-check me-1"></i> My Downloads
+  </button>
+    <button class="btn btn-outline-secondary btn-sm mb-4" onclick="loadSchemes()">
+  <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Filters
+</button>
+</div>
+
+<!-- Toggle Button -->
+<button id="toggleSidebar" class="btn btn-primary position-fixed top-0 start-0 m-2" onclick="toggleSidebar()"
+        style="z-index: 1100;">
+  <i class="bi bi-list"></i> Menu
+</button>
+
 
     <div class="hero-overlay text-white">
         <h1 data-aos="fade-down">📚 Learning Resource Hub</h1>
@@ -205,6 +243,8 @@ input.form-control::placeholder {
       files.forEach(file => {
         const card = document.createElement("div");
         card.className = "col-md-4 mb-4";
+card.setAttribute('data-class', file.class);
+
 
         card.innerHTML = `
           <div class="card shadow-lg border-0 p-4 h-100 d-flex flex-column justify-content-between text-white bg-gradient"
@@ -351,6 +391,45 @@ function promptAndVerify(filename, btn) {
   loadSchemes();
   loadMyDownloads();
 </script>
+    <script>
+  let sidebarOpen = false;
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+      document.body.classList.toggle('sidebar-open');
+    const toggleBtn = document.getElementById('toggleSidebar');
+
+    if (sidebarOpen) {
+      sidebar.style.transform = 'translateX(-100%)';
+      toggleBtn.innerHTML = '<i class="bi bi-list"></i> Menu';
+    } else {
+      sidebar.style.transform = 'translateX(0)';
+      toggleBtn.innerHTML = '<i class="bi bi-x"></i> Close';
+    }
+
+    sidebarOpen = !sidebarOpen;
+  }
+
+function filterByClass(classValue) {
+  const cards = document.querySelectorAll('#scheme-list .col-md-4, #revision-list .col-md-4');
+
+  cards.forEach(card => {
+    const cardClass = card.getAttribute('data-class');
+    card.style.display = cardClass === classValue ? 'block' : 'none';
+  });
+}
+
+
+  function loadMyDownloadsToggle() {
+    const section = document.getElementById('my-downloads');
+    if (section) {
+      section.parentElement.remove();
+    } else {
+      loadMyDownloads();
+    }
+  }
+</script>
+
 
 </body>
 
