@@ -3,135 +3,162 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Access Manager</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"/>
+  <title>Admin Access Control</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     body {
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      color: white;
+      background: #0f0f0f;
+      color: #f8f9fa;
+    }
+    .container {
+      max-width: 720px;
+      margin-top: 60px;
     }
     .card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(8px);
-      border-radius: 15px;
-      border: none;
+      background: #1c1c1c;
+      border: 1px solid #333;
     }
-    input, button {
-      border-radius: 10px !important;
+    .form-control, .btn {
+      border-radius: 0.5rem;
     }
-    .alert {
-      border-radius: 10px;
+    .table th, .table td {
+      vertical-align: middle;
     }
   </style>
 </head>
 <body>
-  <div class="container py-5">
-    <h2 class="text-center mb-4"><i class="bi bi-shield-lock-fill me-2"></i>Admin Email Access Manager</h2>
+<div class="container">
+  <h2 class="text-center mb-4"><i class="bi bi-shield-lock"></i> Access Manager</h2>
 
-    <!-- Alert -->
-    <div id="alertBox" class="alert d-none" role="alert"></div>
-
-    <!-- Add Email -->
-    <div class="card p-4 mb-4">
-      <h5 class="mb-3"><i class="bi bi-person-plus-fill me-2"></i>Add New Email</h5>
+  <div class="card p-4 mb-4">
+    <h5 class="mb-3">➕ Add Access Email</h5>
+    <form id="accessForm">
       <div class="row g-2">
-        <div class="col-md-6">
-          <input id="emailInput" type="email" class="form-control" placeholder="Enter email..." required />
+        <div class="col-md-7">
+          <input type="email" class="form-control" id="email" placeholder="Enter Email" required />
         </div>
-        <div class="col-md-6">
-          <button onclick="addEmail()" class="btn btn-success w-100">
-            <i class="bi bi-plus-circle"></i> Add Email
+        <div class="col-md-3">
+          <input type="number" class="form-control" id="days" placeholder="Days" min="1" required />
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-success w-100">
+            <i class="bi bi-plus-circle"></i>
           </button>
         </div>
       </div>
-    </div>
-
-    <!-- Email List -->
-    <div class="card p-4">
-      <h5 class="mb-3"><i class="bi bi-list-ul me-2"></i>Current Allowed Emails</h5>
-      <ul class="list-group" id="emailList"></ul>
-    </div>
+    </form>
   </div>
 
-  <script>
-    const api = "https://server-1-bmux.onrender.com/api";
+  <div class="card p-4">
+    <h5 class="mb-3">📄 Current Access List</h5>
+    <table class="table table-dark table-striped">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Expires</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="accessList"></tbody>
+    </table>
+  </div>
+</div>
 
-    function showAlert(message, type = "success") {
-      const alertBox = document.getElementById("alertBox");
-      alertBox.className = `alert alert-${type}`;
-      alertBox.textContent = message;
-      alertBox.classList.remove("d-none");
-      setTimeout(() => alertBox.classList.add("d-none"), 4000);
-    }
+<script>
+  const API_URL = 'https://server-1-bmux.onrender.com/api/access';
 
-    async function fetchEmails() {
-      try {
-        const res = await fetch(`${api}/access-list`);
-        const data = await res.json();
-        const list = document.getElementById("emailList");
-        list.innerHTML = "";
+  const accessForm = document.getElementById('accessForm');
+  const emailInput = document.getElementById('email');
+  const daysInput = document.getElementById('days');
+  const accessList = document.getElementById('accessList');
 
-        data.forEach(email => {
-          const li = document.createElement("li");
-          li.className = "list-group-item d-flex justify-content-between align-items-center bg-transparent text-white border-white";
-          li.innerHTML = `
-            ${email}
-            <button onclick="deleteEmail('${email}')" class="btn btn-danger btn-sm">
-              <i class="bi bi-trash3-fill"></i>
-            </button>`;
-          list.appendChild(li);
-        });
-      } catch (error) {
-        showAlert("Failed to fetch emails", "danger");
+  async function loadAccessList() {
+    accessList.innerHTML = '<tr><td colspan="3">Loading...</td></tr>';
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      accessList.innerHTML = '';
+
+      if (!data.length) {
+        accessList.innerHTML = '<tr><td colspan="3">No entries found.</td></tr>';
+        return;
       }
+
+      data.forEach(({ email, expiry }) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${email}</td>
+          <td>${new Date(expiry).toLocaleString()}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="deleteEmail('${email}')">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        `;
+        accessList.appendChild(row);
+      });
+    } catch (err) {
+      Swal.fire('Error', 'Failed to load access list.', 'error');
     }
+  }
 
-    async function addEmail() {
-      const email = document.getElementById("emailInput").value.trim();
-      if (!email) return showAlert("Enter a valid email", "warning");
+  async function deleteEmail(email) {
+    const confirm = await Swal.fire({
+      title: 'Are you sure?',
+      text: `Remove ${email} from access?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yes, delete it!'
+    });
 
+    if (confirm.isConfirmed) {
       try {
-        const res = await fetch(`${api}/access-add`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email })
-        });
-
+        const res = await fetch(`${API_URL}/${encodeURIComponent(email)}`, { method: 'DELETE' });
         const result = await res.json();
-        if (res.ok) {
-          showAlert("Email added successfully");
-          document.getElementById("emailInput").value = "";
-          fetchEmails();
+        if (result.success) {
+          Swal.fire('Deleted!', 'Email removed.', 'success');
+          loadAccessList();
         } else {
-          showAlert(result.error || "Failed to add", "danger");
+          Swal.fire('Error', result.error || 'Failed to delete', 'error');
         }
       } catch (err) {
-        showAlert("Server error while adding", "danger");
+        Swal.fire('Error', 'Server error occurred.', 'error');
       }
     }
+  }
 
-    async function deleteEmail(email) {
-      try {
-        const res = await fetch(`${api}/access-remove`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email })
-        });
+  accessForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    const days = parseInt(daysInput.value.trim(), 10);
 
-        const result = await res.json();
-        if (res.ok) {
-          showAlert("Email removed");
-          fetchEmails();
-        } else {
-          showAlert(result.error || "Error removing", "danger");
-        }
-      } catch (err) {
-        showAlert("Server error while removing", "danger");
+    if (!email || !days) return;
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, days })
+      });
+      const result = await res.json();
+      if (result.success) {
+        Swal.fire('Added!', 'Email has been granted access.', 'success');
+        accessForm.reset();
+        loadAccessList();
+      } else {
+        Swal.fire('Error', result.error || 'Failed to add email.', 'error');
       }
+    } catch (err) {
+      Swal.fire('Error', 'Server error occurred.', 'error');
     }
+  };
 
-    window.onload = fetchEmails;
-  </script>
+  // Load list on page load
+  loadAccessList();
+</script>
 </body>
 </html>
