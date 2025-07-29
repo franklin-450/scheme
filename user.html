@@ -257,22 +257,22 @@ input.form-control::placeholder {
         const email = result.value.trim();
         Swal.fire({ title: 'Verifying...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-        fetch('https://server-1-bmux.onrender.com/api/verify-email', {
+        fetch('https://server-1-bmux.onrender.com/api/verify-access', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, filename })
+          body: JSON.stringify({ email })
         })
         .then(res => res.json())
         .then(data => {
           Swal.close();
-          if (data.access === 'granted' && data.token) {
+          if (data.success && data.message === '✅ Access granted.') {
             Swal.fire('Access Granted ✅', 'Download started.', 'success');
 
             const downloadBtn = btn.nextElementSibling;
             downloadBtn.disabled = false;
             downloadBtn.innerHTML = `
               <a class="text-white text-decoration-none fw-bold"
-                 href="https://server-1-bmux.onrender.com/files/${filename}?token=${data.token}" download>
+                 href="https://server-1-bmux.onrender.com/files/${filename}?token=${data.token || 'static'}" download>
                 <i class="bi bi-cloud-arrow-down-fill me-1"></i> Click to Download
               </a>`;
 
@@ -284,7 +284,7 @@ input.form-control::placeholder {
 
             loadMyDownloads();
           } else {
-            Swal.fire('Access Denied ❌', 'Email not authorized.', 'error');
+            Swal.fire('Access Denied ❌', data.message || 'Email not authorized.', 'error');
           }
         })
         .catch(err => {
