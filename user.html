@@ -132,6 +132,86 @@ input.form-control::placeholder {
 </head>
 
 <body>
+<!-- Preloader -->
+<div id="preloader" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  flex-direction: column;
+  transition: opacity 0.5s ease;
+">
+  <div style="
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #0dcaf0;
+    animation: spinText 2s linear infinite;
+  ">
+    SCHEME HUB
+  </div>
+
+  <!-- Dynamic motivational text -->
+  <div id="quote" style="
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #555;
+    text-align: center;
+    max-width: 300px;
+    padding: 10px;
+  ">
+    <!-- Quote will be inserted here -->
+  </div>
+
+  <div class="spinner-border text-info mt-4" style="width: 3rem; height: 3rem;" role="status"></div>
+</div>
+
+<style>
+@keyframes spinText {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+  // Quotes list
+  const quotes = [
+    "Success starts with preparation. You're already ahead!",
+    "Greatness begins with a single step.",
+    "Dream big. Work smart. Stay humble.",
+    "Every challenge is an opportunity to grow.",
+    "Your only limit is your mindset.",
+    "Start now. Perfection comes with progress.",
+    "The future belongs to those who prepare today.",
+    "Discipline is the bridge between goals and achievement.",
+    "Push yourself. No one else is going to do it for you.",
+    "You were born to do more than just exist."
+  ];
+
+  // Set a random quote
+  window.addEventListener('load', () => {
+    const quoteElement = document.getElementById('quote');
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    quoteElement.textContent = `"${randomQuote}"`;
+
+    // Keep preloader for 10 seconds
+    setTimeout(() => {
+      const preloader = document.getElementById('preloader');
+      if (preloader) {
+        preloader.style.opacity = '0';
+        setTimeout(() => preloader.remove(), 500);
+      }
+    }, 5000); // 10 seconds
+  });
+</script>
+
     <div class="background-slide" id="background-slide"></div>
     <!-- Add the following HTML inside <body> but before .hero-overlay -->
 <div id="sidebar" class="position-fixed top-0 start-0 vh-100 bg-dark text-white p-3 d-flex flex-column"
