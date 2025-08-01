@@ -152,6 +152,9 @@
       const data = await response.json();
 
       if (data.success) {
+        // ✅ Save admin key to localStorage
+        localStorage.setItem('adminKey', secret);
+
         Swal.fire({
           icon: 'success',
           title: 'Login Successful',
