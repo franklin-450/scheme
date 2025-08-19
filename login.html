@@ -154,7 +154,7 @@
       if (data.success) {
         // ✅ Save admin key to localStorage
 localStorage.setItem('adminKey', JSON.stringify({
-  value: secret,
+  value: key,
   expires: Date.now() + 1800000 // 30 mins in ms
 }));
 
