@@ -11,142 +11,61 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    body {
-      background: linear-gradient(to right, #e3f2fd, #ffffff);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .upload-container {
-      max-width: 1000px;
-      margin: 5vh auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
-    }
-    .admin-header {
-      text-align: center;
-      font-size: 1.75rem;
-      color: #0d6efd;
-      margin-bottom: 2rem;
-    }
-    .stats {
-      background: #f1f3f5;
-      padding: 1rem;
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 2rem;
-    }
+    body { background: linear-gradient(to right, #e3f2fd, #ffffff); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .upload-container { max-width: 1000px; margin: 5vh auto; padding: 2rem; background: white; border-radius: 20px; box-shadow: 0 0 25px rgba(0, 0, 0, 0.15); }
+    .admin-header { text-align: center; font-size: 1.75rem; color: #0d6efd; margin-bottom: 2rem; }
+    .stats { background: #f1f3f5; padding: 1rem; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 2rem; }
     .stat-box h5 { margin: 0; color: #0d6efd; }
-    #preview {
-      width: 100%;
-      height: 180px;
-      border: 1px dashed #ccc;
-      display: none;
-      margin-top: 1rem;
-      object-fit: contain;
-    }
-    .footer {
-      text-align: center;
-      font-size: 0.85rem;
-      margin-top: 40px;
-      color: #777;
-    }
-    /* Preloader */
-    #preloader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #ffffff;
-      display: flex; justify-content: center; align-items: center;
-      flex-direction: column;
-      z-index: 9999;
-      transition: opacity 0.6s ease;
-    }
-    #preloader-title {
-      font-size: 2.5rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      animation: spinText 3s linear infinite;
-      color: #0dcaf0;
-    }
-    #tagline {
-      margin-top: 10px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #555;
-    }
-    @keyframes spinText {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
-    }
+    #preview { width: 100%; height: 180px; border: 1px dashed #ccc; display: none; margin-top: 1rem; object-fit: contain; }
+    .footer { text-align: center; font-size: 0.85rem; margin-top: 40px; color: #777; }
+    #preloader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; transition: opacity 0.6s ease; }
+    #preloader-title { font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; animation: spinText 3s linear infinite; color: #0dcaf0; }
+    #tagline { margin-top: 10px; font-size: 1.1rem; font-weight: 500; color: #555; }
+    @keyframes spinText { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
   </style>
 </head>
 <body>
 
-<!-- 🌀 Preloader -->
+<!-- Preloader -->
 <div id="preloader">
   <div id="preloader-title">SCHEME HUB</div>
   <div id="tagline">Smart Notes, Smarter You.</div>
   <div class="spinner-border text-info mt-4" style="width: 3rem; height: 3rem;" role="status"></div>
 </div>
 
-<!-- Upload UI -->
 <div class="upload-container" style="display:none;" id="mainContent">
   <div class="admin-header">🔐 Admin Panel – Upload Scheme</div>
 
   <!-- Stats -->
   <div class="stats">
-    <div class="stat-box">
-      <h5 id="totalFiles">0</h5>
-      <small>Total Files</small>
-    </div>
-    <div class="stat-box">
-      <h5 id="pdfCount">0</h5>
-      <small>PDF Schemes</small>
-    </div>
-    <div class="stat-box">
-      <h5 id="docxCount">0</h5>
-      <small>DOCX Schemes</small>
-    </div>
+    <div class="stat-box"><h5 id="totalFiles">0</h5><small>Total Files</small></div>
+    <div class="stat-box"><h5 id="pdfCount">0</h5><small>PDF Schemes</small></div>
+    <div class="stat-box"><h5 id="docxCount">0</h5><small>DOCX Schemes</small></div>
   </div>
 
   <!-- Upload Form -->
   <form id="uploadForm" enctype="multipart/form-data">
     <div class="row g-3">
-      <div class="col-md-6">
-        <label class="form-label">Title</label>
-        <input type="text" class="form-control" name="title" required />
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">Subject</label>
-        <input type="text" class="form-control" name="subject" required />
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">Class</label>
-        <input type="text" class="form-control" name="class" required />
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">Price (KES)</label>
-        <input type="number" class="form-control" name="price" min="0" required />
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">Type</label>
+      <div class="col-md-6"><label class="form-label">Title</label><input type="text" class="form-control" name="title" required /></div>
+      <div class="col-md-6"><label class="form-label">Subject</label><input type="text" class="form-control" name="subject" required /></div>
+      <div class="col-md-6"><label class="form-label">Class</label><input type="text" class="form-control" name="class" required /></div>
+      <div class="col-md-6"><label class="form-label">Price (KES)</label><input type="number" class="form-control" name="price" min="0" required /></div>
+      <div class="col-md-6"><label class="form-label">Type</label>
         <select name="type" class="form-select" required>
           <option value="">-- Select Type --</option>
           <option value="scheme">Scheme</option>
           <option value="revision">Revision Paper</option>
         </select>
       </div>
+      <!-- ✅ Added category -->
+      <div class="col-md-6"><label class="form-label">Category</label><input type="text" class="form-control" name="category" required /></div>
       <div class="col-12">
         <label class="form-label">Choose File</label>
         <input type="file" class="form-control" name="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required onchange="previewFile(this)" />
         <iframe id="preview"></iframe>
       </div>
     </div>
-    <div class="text-center mt-4">
-      <button type="submit" class="btn btn-primary w-100" id="uploadBtn">Upload Scheme</button>
-    </div>
+    <div class="text-center mt-4"><button type="submit" class="btn btn-primary w-100" id="uploadBtn">Upload Scheme</button></div>
   </form>
 
   <hr>
@@ -157,74 +76,42 @@
 </div>
 
 <script>
-  // 🔑 Admin key validation (like login page)
-  const preloader = document.getElementById('preloader');
-  const mainContent = document.getElementById('mainContent');
-
-  // Animation for letters
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes spinText {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
-    }
-  `;
-  document.head.appendChild(style);
-
-  // Check admin key
+  // Preloader → Key validation
   setTimeout(() => {
-const keyObj = JSON.parse(localStorage.getItem('adminKey'));
-const expired = !keyObj || !keyObj.value || Date.now() > keyObj.expires;
+    const keyObj = JSON.parse(localStorage.getItem('adminKey'));
+    const expired = !keyObj || !keyObj.value || Date.now() > keyObj.expires;
+    if (expired) {
+      localStorage.removeItem('adminKey');
+      window.location.href = 'index';
+    } else {
+      preloader.style.opacity = '0';
+      setTimeout(() => { preloader.style.display = 'none'; mainContent.style.display = 'block'; }, 600);
+    }
+  }, 200);
 
-if (expired) {
-localStorage.removeItem('adminKey');
-window.location.href = 'index';
-} else {
-const preloader = document.getElementById('preloader');
-const mainContent = document.getElementById('mainContent');
-
-preloader.style.opacity = '0';
-preloader.style.transition = 'opacity 0.6s ease';
-
-setTimeout(() => {
-  preloader.style.display = 'none';
-  mainContent.style.display = 'block';
-}, 600);
-}
-}, 200);
-
-  // File preview
   function previewFile(input) {
     const file = input.files[0];
     const preview = document.getElementById('preview');
     if (file) {
       const reader = new FileReader();
-      reader.onload = e => {
-        preview.src = e.target.result;
-        preview.style.display = "block";
-      };
+      reader.onload = e => { preview.src = e.target.result; preview.style.display = "block"; };
       reader.readAsDataURL(file);
-    } else {
-      preview.style.display = "none";
-    }
+    } else { preview.style.display = "none"; }
   }
 
-  // Upload form
+  // Upload
   document.getElementById('uploadForm').addEventListener('submit', async e => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const btn = document.getElementById('uploadBtn');
-    btn.disabled = true;
-    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Uploading...`;
+    btn.disabled = true; btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Uploading...`;
 
     try {
       const res = await fetch('https://server-1-bmux.onrender.com/api/upload', { method: 'POST', body: formData });
       const result = await res.json();
-
       if (result.success) {
         Swal.fire('✅ Success', 'File uploaded successfully!', 'success');
-        e.target.reset();
-        document.getElementById('preview').style.display = 'none';
+        e.target.reset(); document.getElementById('preview').style.display = 'none';
         loadFiles();
       } else {
         Swal.fire('❌ Failed', result.message || 'Upload failed.', 'error');
@@ -232,23 +119,17 @@ setTimeout(() => {
     } catch (err) {
       Swal.fire('⚠️ Error', 'Server not responding.', 'error');
     } finally {
-      btn.disabled = false;
-      btn.innerText = 'Upload Scheme';
+      btn.disabled = false; btn.innerText = 'Upload Scheme';
     }
   });
 
-  // Load files list
+  // Load files
   async function loadFiles() {
     const res = await fetch('https://server-1-bmux.onrender.com/api/files');
     const files = await res.json();
     const container = document.getElementById('fileList');
-    const total = document.getElementById('totalFiles');
-    const pdfCount = document.getElementById('pdfCount');
-    const docxCount = document.getElementById('docxCount');
-
     container.innerHTML = '';
     let pdf = 0, docx = 0;
-
     files.forEach(file => {
       const ext = file.filename.split('.').pop().toLowerCase();
       if (ext === 'pdf') pdf++;
@@ -266,7 +147,8 @@ setTimeout(() => {
               Price: KES ${file.price}
             </p>
             <div class="mt-auto d-grid gap-2">
-              <a href="/api/files/${file.filename}" class="btn btn-outline-success btn-sm" target="_blank">
+              <!-- ✅ Fixed file path -->
+              <a href="https://server-1-bmux.onrender.com/uploads/${file.filename}" class="btn btn-outline-success btn-sm" target="_blank">
                 <i class="bi bi-eye"></i> View
               </a>
               <button class="btn btn-outline-danger btn-sm" onclick="deleteFile('${file.filename}')">
@@ -278,30 +160,19 @@ setTimeout(() => {
       container.appendChild(col);
     });
 
-    total.textContent = files.length;
-    pdfCount.textContent = pdf;
-    docxCount.textContent = docx;
+    document.getElementById('totalFiles').textContent = files.length;
+    document.getElementById('pdfCount').textContent = pdf;
+    document.getElementById('docxCount').textContent = docx;
   }
 
-  // Delete file
+  // Delete
   async function deleteFile(filename) {
-    const confirm = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'This will permanently delete the file.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!'
-    });
-
+    const confirm = await Swal.fire({ title: 'Are you sure?', text: 'This will permanently delete the file.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, delete it!' });
     if (confirm.isConfirmed) {
       const res = await fetch(`https://server-1-bmux.onrender.com/api/files/${filename}`, { method: 'DELETE' });
       const result = await res.json();
-      if (result.success) {
-        Swal.fire('Deleted!', 'File removed.', 'success');
-        loadFiles();
-      } else {
-        Swal.fire('Failed!', result.message || 'Could not delete.', 'error');
-      }
+      if (result.success) { Swal.fire('Deleted!', 'File removed.', 'success'); loadFiles(); }
+      else { Swal.fire('Failed!', result.message || 'Could not delete.', 'error'); }
     }
   }
 
