@@ -104,7 +104,7 @@
         <footer class="text-center mt-5">
             <div class="d-flex flex-column align-items-center gap-2">
                 <button onclick="handleUpload()" class="btn btn-success w-50">Upload New Scheme</button>
-                <button onclick="handlePayment()" class="btn btn-warning w-50">Make a Global Payment</button>
+                <button onclick="handlePayment()" class="btn btn-warning w-50">Manage Revenue</button>
                 <button onclick="handleContact()" class="btn btn-light w-50">Contact Support</button>
             </div>
             <p class="mt-3 text-muted">&copy; 2025 Scheme Hub. Powered by FinTech + EduTech.</p>
@@ -123,14 +123,17 @@
             setTimeout(() => window.location.href = 'Upload.html', 2000);
         }
 
-        function handlePayment() {
-            Swal.fire({
-                title: 'Payment Gateway',
-                html: '<input type="text" class="form-control" placeholder="Enter Amount"><br><input type="text" class="form-control" placeholder="Card/M-Pesa Number">',
-                confirmButtonText: 'Proceed to Pay'
-            });
-        }
 
+        function handleUpload() {
+            Swal.fire({
+                title: 'Revenue',
+                text: 'Redirecting to Revenue Manager...',
+                icon: 'info',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            setTimeout(() => window.location.href = 'manage', 2000);
+        }
         function handleContact() {
             Swal.fire({
                 title: 'Contact Us',
@@ -160,5 +163,6 @@
             });
     </script>
 </body>
+
 
 </html>
