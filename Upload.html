@@ -147,10 +147,11 @@
               Price: KES ${file.price}
             </p>
             <div class="mt-auto d-grid gap-2">
-              <!-- ✅ Fixed file path -->
-              <a href="https://server-1-bmux.onrender.com/api/admin/files/:filename" class="btn btn-outline-success btn-sm" target="_blank">
-                <i class="bi bi-eye"></i> View
-              </a>
+              <!-- ✅ Fixed file path --><a href="https://server-1-bmux.onrender.com/api/uploads/${file.filename}" 
+   class="btn btn-outline-success btn-sm" target="_blank">
+  <i class="bi bi-eye"></i> View
+</a>
+
               <button class="btn btn-outline-danger btn-sm" onclick="deleteFile('${file.filename}')">
                 <i class="bi bi-trash"></i> Delete
               </button>
@@ -169,7 +170,7 @@
   async function deleteFile(filename) {
     const confirm = await Swal.fire({ title: 'Are you sure?', text: 'This will permanently delete the file.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, delete it!' });
     if (confirm.isConfirmed) {
-      const res = await fetch(`https://server-1-bmux.onrender.com/api/admin/files/:filename/metadata`, { method: 'DELETE' });
+      const res = await fetch(`https://server-1-bmux.onrender.com/api/admin/files/${filename}/metadata`, { method: 'DELETE' });
       const result = await res.json();
       if (result.success) { Swal.fire('Deleted!', 'File removed.', 'success'); loadFiles(); }
       else { Swal.fire('Failed!', result.message || 'Could not delete.', 'error'); }
